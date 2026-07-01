@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pew Pal - Privacy Policy</title>
+    <title>Pew Pal - Privacy Policy / Política de Privacidade</title>
     <style>
         * {
             margin: 0;
@@ -36,6 +36,10 @@
         }
         .last-updated {
             color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .lang-switch {
             font-size: 0.9em;
             margin-bottom: 30px;
         }
@@ -72,6 +76,11 @@
         a:hover {
             text-decoration: underline;
         }
+        .lang-divider {
+            border: none;
+            border-top: 2px solid #007AFF;
+            margin: 55px 0 35px;
+        }
         .footer {
             margin-top: 40px;
             padding-top: 20px;
@@ -91,10 +100,10 @@
 <body>
     <div class="container">
         <img src="app-icon.png" alt="Pew Pal" class="icon">
-        <h1>Privacy Policy</h1>
+        <h1 id="top">Privacy Policy</h1>
         <p class="app-name">Pew Pal - Catholic Mass Companion</p>
         <p class="last-updated">Last updated: June 10, 2026</p>
-        <p style="font-size:0.9em; margin-bottom:30px;"><a href="privacy-pt-br.html">Português (Brasil)</a></p>
+        <p class="lang-switch"><a href="#portugues">Português (Brasil) &#8595;</a></p>
 
         <div class="highlight">
             <p><strong>Our Commitment:</strong> Pew Pal is designed with your privacy as a priority. We collect minimal data and never share your personal information with third parties.</p>
@@ -103,7 +112,7 @@
         <h2>Information We Collect</h2>
         <p>Pew Pal collects and stores the following information <strong>locally on your device only</strong>:</p>
         <ul>
-            <li><strong>Language Preferences:</strong> Your choice of English, Latin, or side-by-side display mode</li>
+            <li><strong>Language Preferences:</strong> Your choice of content language (English or Portuguese), Latin, or side-by-side display mode</li>
             <li><strong>Font Size Settings:</strong> Your preferred text size for comfortable reading</li>
             <li><strong>App Settings:</strong> Other display preferences you configure</li>
         </ul>
@@ -151,6 +160,69 @@
 
         <h2>Your Rights</h2>
         <p>Since we don't collect personal data, there is no personal information for us to provide, correct, or delete. Your locally stored preferences can be reset by uninstalling and reinstalling the app.</p>
+
+        <hr class="lang-divider" id="portugues">
+
+        <h1>Política de Privacidade</h1>
+        <p class="app-name">Pew Pal — Companheiro da Missa Católica</p>
+        <p class="last-updated">Última atualização: 10 de junho de 2026</p>
+        <p class="lang-switch"><a href="#top">English &#8593;</a></p>
+
+        <div class="highlight">
+            <p><strong>Nosso compromisso:</strong> o Pew Pal foi criado tendo a sua privacidade como prioridade. Coletamos o mínimo de dados e nunca compartilhamos suas informações pessoais com terceiros.</p>
+        </div>
+
+        <h2>Informações que coletamos</h2>
+        <p>O Pew Pal coleta e armazena as seguintes informações <strong>apenas localmente no seu dispositivo</strong>:</p>
+        <ul>
+            <li><strong>Preferências de idioma:</strong> sua escolha do idioma de conteúdo (inglês ou português), do latim ou do modo de exibição lado a lado</li>
+            <li><strong>Tamanho da fonte:</strong> o tamanho de texto de sua preferência para uma leitura confortável</li>
+            <li><strong>Configurações do aplicativo:</strong> outras preferências de exibição que você definir</li>
+        </ul>
+        <p>Esses dados são armazenados usando o armazenamento local padrão de preferências do seu dispositivo (UserDefaults no iOS, DataStore no Android) e nunca saem do seu aparelho.</p>
+
+        <h2>Informações que NÃO coletamos</h2>
+        <p>O Pew Pal <strong>não</strong> coleta, armazena nem transmite:</p>
+        <ul>
+            <li>Informações de identificação pessoal (nome, e-mail, telefone)</li>
+            <li>Dados de localização</li>
+            <li>Análises de uso ou dados de rastreamento</li>
+            <li>Identificadores do dispositivo</li>
+            <li>Histórico de navegação</li>
+            <li>Quaisquer dados de outros aplicativos do seu dispositivo</li>
+        </ul>
+
+        <h2>Assinaturas e pagamentos</h2>
+        <p>O Pew Pal oferece uma assinatura opcional para acesso completo a todos os recursos. Todos os pagamentos de assinatura são processados inteiramente pela loja de aplicativos em que você fez a compra — Apple (App Store) ou Google (Google Play). Não temos acesso às suas informações de pagamento, aos dados do seu cartão de crédito, nem à sua conta Apple ID / Google.</p>
+        <p>O gerenciamento da assinatura, incluindo o cancelamento, é feito nas configurações do seu Apple ID (iOS) ou nas configurações de assinatura do Google Play (Android). Para mais informações, acesse a <a href="https://support.apple.com/pt-br/HT202039" target="_blank">página de suporte a assinaturas da Apple</a> ou a <a href="https://support.google.com/googleplay/answer/7018481" target="_blank">página de suporte a assinaturas do Google Play</a>.</p>
+
+        <h2>Serviços de terceiros</h2>
+        <p>O Pew Pal utiliza os seguintes serviços de plataforma:</p>
+        <ul>
+            <li><strong>Apple StoreKit</strong> (iOS): para processar assinaturas dentro do aplicativo (regido pela <a href="https://www.apple.com/legal/privacy/pt-br/" target="_blank">Política de Privacidade da Apple</a>)</li>
+            <li><strong>Google Play Billing</strong> (Android): para processar assinaturas dentro do aplicativo (regido pela <a href="https://policies.google.com/privacy?hl=pt-BR" target="_blank">Política de Privacidade do Google</a>)</li>
+        </ul>
+        <p>Não integramos nenhum serviço de análise, publicidade ou rastreamento de terceiros.</p>
+
+        <h2>Segurança dos dados</h2>
+        <p>Como todos os seus dados são armazenados localmente no seu dispositivo e não transmitimos nenhuma informação para servidores externos, seus dados são protegidos pelos recursos de segurança nativos do seu aparelho, incluindo:</p>
+        <ul>
+            <li>Senha do dispositivo e proteção biométrica (Face ID / Touch ID / impressão digital)</li>
+            <li>Criptografia integrada do dispositivo (iOS e Android)</li>
+        </ul>
+
+        <h2>Privacidade das crianças</h2>
+        <p>O Pew Pal não coleta intencionalmente nenhuma informação pessoal de crianças. O aplicativo contém conteúdo litúrgico católico adequado para todas as idades e não inclui recursos que exijam a coleta de dados pessoais de usuários de qualquer idade.</p>
+
+        <h2>Alterações nesta política</h2>
+        <p>Podemos atualizar esta Política de Privacidade periodicamente. Quaisquer alterações serão refletidas nesta página, com a data de "Última atualização" atualizada. Recomendamos que você revise esta política de tempos em tempos.</p>
+
+        <h2>Fale conosco</h2>
+        <p>Se você tiver qualquer dúvida sobre esta Política de Privacidade ou sobre as práticas de privacidade do Pew Pal, entre em contato conosco pelo e-mail:</p>
+        <p><a href="mailto:braniapps@gmail.com">braniapps@gmail.com</a></p>
+
+        <h2>Seus direitos</h2>
+        <p>Como não coletamos dados pessoais, não há informações pessoais para fornecermos, corrigirmos ou excluirmos — inclusive no que se refere aos direitos previstos na Lei Geral de Proteção de Dados (LGPD, Lei nº 13.709/2018). As preferências armazenadas localmente podem ser redefinidas desinstalando e reinstalando o aplicativo.</p>
 
         <div class="footer">
             <p><em>Totus Tuus</em></p>
