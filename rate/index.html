@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rate Pew Pal</title>
+  <meta name="robots" content="noindex">
+  <style>
+    html,body{height:100%;margin:0}
+    body{display:flex;flex-direction:column;align-items:center;justify-content:center;
+         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         color:#3a2a14;background:#faf6ee;text-align:center;padding:2rem;gap:.6rem;line-height:1.5}
+    h1{font-size:1.5rem;margin:.25rem 0}
+    p{margin:.25rem 0;max-width:23rem}
+    ol{text-align:left;max-width:20rem;margin:.4rem auto;font-size:1.1rem;padding-left:1.4rem}
+    li{margin:.35rem 0}
+    .btn{display:inline-block;margin-top:.8rem;padding:.85rem 1.6rem;border-radius:999px;
+         background:#9a6a1f;color:#fff;font-weight:700;text-decoration:none;font-size:1.05rem}
+    .muted{color:#8a7a5c;font-size:.9rem;margin-top:.6rem}
+    #inapp{display:none}
+  </style>
+</head>
+<body>
+  <div id="inapp">
+    <h1>Almost there &#128591;</h1>
+    <p>This in-app browser can't open the App Store. One quick step:</p>
+    <ol>
+      <li>Tap the <strong>&#8943;</strong> menu, top-right</li>
+      <li>Choose <strong>Open in browser</strong></li>
+    </ol>
+    <p>You'll land right on the review form.</p>
+  </div>
+  <div id="main">
+    <h1>Rate Pew Pal &#11088;</h1>
+    <p id="hint">Opening the review page&hellip; if nothing happens, tap below.</p>
+  </div>
+  <a id="rate-btn" class="btn" href="https://apps.apple.com/app/id6757607612?action=write-review">Rate Pew Pal</a>
+  <p class="muted">A quick rating helps other faithful find Pew Pal. Thank you. &#128591;</p>
+  <script>
+    // iOS -> App Store write-review deep link (opens the review form directly;
+    // exempt from Apple's in-app prompt throttle). Android -> the Play listing,
+    // where the rating stars sit at the top. No tokens: ratings aren't
+    // source-attributable in either store, so there is nothing to carry.
+    var IOS_URL = "https://apps.apple.com/app/id6757607612?action=write-review";
+    var AND_URL = "https://play.google.com/store/apps/details?id=com.pewpal.app";
+
+    var ua = navigator.userAgent || "";
+    var isAndroid = /Android/i.test(ua);
+    var isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    var isTikTok = /BytedanceWebview|musical_ly|TikTok|trill/i.test(ua);
+    var isMetaApp = /Instagram|FBAN|FBAV|FB_IAB/i.test(ua);
+
+    var btn = document.getElementById("rate-btn");
+    if (isAndroid) { btn.href = AND_URL; btn.textContent = "Rate Pew Pal on Google Play"; }
+
+    if (isAndroid) {
+      location.replace(AND_URL);
+    } else if (isIOS && isTikTok) {
+      document.getElementById("inapp").style.display = "block";
+      document.getElementById("main").style.display = "none";
+    } else if (isIOS && isMetaApp) {
+      document.getElementById("inapp").style.display = "block";
+      document.getElementById("main").style.display = "none";
+      setTimeout(function () { location.replace(IOS_URL); }, 400);
+    } else if (isIOS) {
+      location.replace(IOS_URL);
+    } else {
+      document.getElementById("hint").textContent = "Open this on your phone, or tap below.";
+    }
+  </script>
+  <noscript><p>Tap the button above.</p></noscript>
+</body>
+</html>
