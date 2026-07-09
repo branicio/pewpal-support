@@ -14,31 +14,87 @@
     p{margin:.25rem 0;max-width:23rem}
     ol{text-align:left;max-width:20rem;margin:.4rem auto;font-size:1.1rem;padding-left:1.4rem}
     li{margin:.35rem 0}
-    .btn{display:inline-block;margin-top:.8rem;padding:.85rem 1.6rem;border-radius:999px;
-         background:#9a6a1f;color:#fff;font-weight:700;text-decoration:none;font-size:1.05rem}
+    .badges{display:flex;flex-direction:column;align-items:center;gap:.2rem;margin-top:.6rem}
+    .badges img.as{height:50px}
+    .badges img.gp{height:74px} /* Google's badge art has built-in padding; visually matches 50px */
     .muted{color:#8a7a5c;font-size:.9rem;margin-top:.6rem}
     #inapp{display:none}
   </style>
-  <script>
-    var APP = "https://apps.apple.com/us/app/id6757607612?ct=tiktok-bio";
-    var inApp = /BytedanceWebview|musical_ly|TikTok|trill|Instagram|FBAN|FBAV|FB_IAB/i.test(navigator.userAgent || "");
-    // Real browser (Safari/Chrome) → hand straight off to the App Store.
-    // In-app browser (TikTok/IG/FB) → can't open the App Store; show instructions instead of failing silently.
-    if (!inApp) { location.replace(APP); }
-  </script>
 </head>
-<body onload="if(/BytedanceWebview|musical_ly|TikTok|trill|Instagram|FBAN|FBAV|FB_IAB/i.test(navigator.userAgent||'')){document.getElementById('inapp').style.display='block';}">
+<body>
   <div id="inapp">
     <h1>Almost there &#128591;</h1>
-    <p>TikTok's in-app browser can't open the App Store. One quick step:</p>
+    <p>This in-app browser can't open the App Store. One quick step:</p>
     <ol>
       <li>Tap the <strong>&#8943;</strong> menu, top-right</li>
       <li>Choose <strong>Open in browser</strong></li>
     </ol>
-    <p>You'll land right on Pew Pal in the App Store.</p>
-    <a class="btn" href="https://apps.apple.com/us/app/id6757607612?ct=tiktok-bio">Get Pew Pal on the App Store</a>
-    <p class="muted">Your Catholic Mass missal &mdash; Latin &amp; English, Rosary, Liturgy of the Hours, offline.</p>
+    <p>You'll land right on Pew Pal in the App Store &mdash; or tap below.</p>
   </div>
-  <noscript><a class="btn" href="https://apps.apple.com/us/app/id6757607612?ct=tiktok-bio">Get Pew Pal on the App Store</a></noscript>
+  <div id="main">
+    <h1>Get Pew Pal</h1>
+    <p id="hint">Opening your app store&hellip; if nothing happens, tap your store below.</p>
+  </div>
+  <div class="badges">
+    <a id="as-badge" href="https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&amp;ct=web-direct&amp;mt=8">
+      <img class="as" src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store">
+    </a>
+    <a id="gp-badge" href="https://play.google.com/store/apps/details?id=com.pewpal.app&amp;referrer=utm_source%3Dweb-direct">
+      <img class="gp" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
+    </a>
+  </div>
+  <p class="muted">Your Catholic Mass missal &mdash; Latin &amp; English, Rosary, Liturgy of the Hours, offline.<br>
+     Seu missal cat&oacute;lico &mdash; Missa, Ros&aacute;rio e Liturgia das Horas, offline.</p>
+  <script>
+    // Campaign token: /get/?p=<token>. Bare /get/ predates tokens and is the live
+    // TikTok bio link, so the default MUST stay "tiktok-bio" for series continuity.
+    var m = /[?&]p=([a-z0-9-]{1,40})(&|$)/i.exec(location.search);
+    var token = (m ? m[1] : "tiktok-bio").toLowerCase();
+
+    // iOS campaign links need BOTH pt= and ct= to register in ASC -> Campaigns.
+    var IOS_URL = "https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&ct=" + token + "&mt=8";
+    // Play referrer must be encoded exactly once: utm_source%3D<token>, never %253D.
+    var AND_URL = "https://play.google.com/store/apps/details?id=com.pewpal.app&referrer=" + encodeURIComponent("utm_source=" + token);
+
+    var ua = navigator.userAgent || "";
+    var isAndroid = /Android/i.test(ua);
+    // iPadOS 13+ masquerades as desktop Safari: MacIntel platform + touch points.
+    var isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    // TikTok's webview can't hand off to the App Store (empirical — hence the
+    // escape instructions); Meta's webviews usually can, so those get a redirect
+    // attempt with the instructions left visible as the fallback.
+    var isTikTok = /BytedanceWebview|musical_ly|TikTok|trill/i.test(ua);
+    var isMetaApp = /Instagram|FBAN|FBAV|FB_IAB/i.test(ua);
+    var os = isAndroid ? "android" : (isIOS ? "ios" : "other");
+
+    // Retarget the fallback badges with this hit's token.
+    document.getElementById("as-badge").href = IOS_URL;
+    document.getElementById("gp-badge").href = AND_URL;
+
+    // Optional click beacon (GoatCounter, cookie-less). Set GC to enable, e.g.
+    // "https://pewpal.goatcounter.com/count". Empty string = disabled, page still works.
+    var GC = "";
+    if (GC) {
+      (new Image()).src = GC + "?p=" + encodeURIComponent("/get/" + token) +
+                          "&t=" + encodeURIComponent(token + " " + os);
+    }
+
+    if (isAndroid) {
+      // Play https links hand off to the Play Store app even from in-app webviews.
+      setTimeout(function () { location.replace(AND_URL); }, GC ? 120 : 0);
+    } else if (isIOS && isTikTok) {
+      document.getElementById("inapp").style.display = "block";
+      document.getElementById("main").style.display = "none";
+    } else if (isIOS && isMetaApp) {
+      document.getElementById("inapp").style.display = "block";
+      document.getElementById("main").style.display = "none";
+      setTimeout(function () { location.replace(IOS_URL); }, 400);
+    } else if (isIOS) {
+      setTimeout(function () { location.replace(IOS_URL); }, GC ? 120 : 0);
+    } else {
+      document.getElementById("hint").textContent = "Scan the code again on your phone, or pick your store below.";
+    }
+  </script>
+  <noscript><p>Pick your store above.</p></noscript>
 </body>
 </html>
