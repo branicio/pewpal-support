@@ -2,14 +2,18 @@
   // Set first: styles.css only hides languages once this is present, so a
   // script error before this line (e.g. a parse failure) degrades to all
   // three languages shown stacked, never to none. That covers failures
-  // BEFORE this line executes. A second, independent guarantee covers
-  // everything AFTER it: resolveLang() below makes it structurally
-  // impossible for apply() to leave zero [data-lang] sections active, even
-  // when the requested language is bogus (a typo'd data-lang-target, a
-  // missing data-lang, a stray extra tab). Showing the wrong language is a
-  // cosmetic bug; showing none is a legal-content outage.
+  // BEFORE this line executes. Everything AFTER it runs inside the
+  // try/catch below, whose catch removes this very attribute: it is what
+  // authorises the stylesheet to hide any [data-lang] section, so any
+  // failure to complete setup must withdraw that authorisation rather than
+  // leave content hidden with nothing left running to recover it. That
+  // makes "zero active sections" structurally impossible for ANY setup
+  // failure, not just the specific ones resolveLang() (below) is built to
+  // handle — showing the wrong language is a cosmetic bug, showing none is
+  // a legal-content outage.
   document.documentElement.dataset.js = "on";
 
+  try {
   var HASH = { portugues: "pt", espanol: "es", top: "en" };
   var LANG_ATTR = { en: "en", pt: "pt-BR", es: "es" };
 
@@ -124,4 +128,14 @@
 
   apply(pick(), false);
   window.addEventListener("hashchange", function () { apply(pick(), false); });
+
+  } catch (err) {
+    // Setup did not complete, so withdraw the authorisation data-js grants
+    // the stylesheet to hide content: without it, the no-JS stylesheet
+    // branch takes over and all three languages render stacked, exactly
+    // the known-good degraded state this design already relies on for a
+    // script that never ran at all. Never rethrow past this point.
+    document.documentElement.removeAttribute("data-js");
+    console.error("site.js: language-tab setup failed, falling back to no-JS presentation", err);
+  }
 })();
