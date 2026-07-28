@@ -1,416 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pew Pal - Catholic Mass Companion</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 60px 20px;
-        }
-        .app-icon {
-            width: 120px;
-            height: 120px;
-            border-radius: 27px;
-            margin: 0 auto 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        h1 {
-            color: white;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .tagline {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.2em;
-            margin-bottom: 40px;
-        }
-        .features {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            text-align: left;
-        }
-        .features h2 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .feature {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-        .feature-icon {
-            font-size: 1.5em;
-            margin-right: 15px;
-            min-width: 30px;
-        }
-        .feature-text h3 {
-            font-size: 1em;
-            color: #333;
-            margin-bottom: 2px;
-        }
-        .feature-text p {
-            font-size: 0.9em;
-            color: #666;
-        }
-        .store-badges {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-        .app-store-badge {
-            display: inline-block;
-        }
-        .app-store-badge img {
-            height: 50px;
-        }
-        .play-badge {
-            display: inline-block;
-        }
-        .play-badge img {
-            height: 74px; /* Google's badge art has built-in padding; visually matches 50px */
-        }
-        .links {
-            margin-top: 30px;
-        }
-        .links a {
-            color: rgba(255,255,255,0.9);
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 0.95em;
-        }
-        .links a:hover {
-            color: white;
-            text-decoration: underline;
-        }
-        .lang-divider {
-            border: none;
-            border-top: 1px solid rgba(255,255,255,0.4);
-            max-width: 600px;
-            margin: 50px auto 30px;
-        }
-        .footer {
-            margin-top: 40px;
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9em;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pew Pal - Catholic Mass Companion</title>
+  <meta name="description" content="Follow along with the Novus Ordo Mass and 1962 Traditional Latin Mass. English, Portuguese, Spanish, Latin, or side-by-side display. Works offline with no data collection or tracking.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="app-icon.png">
+  <script src="site.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <img src="app-icon.png" alt="Pew Pal" class="app-icon">
-        <h1>Pew Pal</h1>
-        <p class="tagline">Your Catholic Mass Companion</p>
+  <a class="skip-link" href="#top" data-i18n-en="Skip to content" data-i18n-pt="Ir para o conteúdo" data-i18n-es="Ir al contenido">Skip to content</a>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="app-icon.png" alt="" class="brand-mark">
+        Pew Pal
+      </a>
+      <div class="nav-links">
+        <a href="index.html" data-i18n-en="Home" data-i18n-pt="Início" data-i18n-es="Inicio">Home</a>
+        <a href="privacy.html" data-i18n-en="Privacy" data-i18n-pt="Privacidade" data-i18n-es="Privacidad">Privacy</a>
+        <a href="terms.html" data-i18n-en="Terms" data-i18n-pt="Termos" data-i18n-es="Términos">Terms</a>
+        <a href="mailto:braniapps@gmail.com" data-i18n-en="Support" data-i18n-pt="Suporte" data-i18n-es="Soporte">Support</a>
+      </div>
+      <div class="nav-right">
+        <div class="langtabs" role="tablist" aria-label="Language">
+          <button role="tab" class="langtab" data-lang-target="en" aria-label="English">EN</button>
+          <button role="tab" class="langtab" data-lang-target="pt" aria-label="Português">PT</button>
+          <button role="tab" class="langtab" data-lang-target="es" aria-label="Español">ES</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <section data-lang="en" lang="en">
+      <header class="hero-midnight">
+        <div class="wrap">
+          <img src="app-icon.png" alt="Pew Pal" class="hero-icon" data-rise>
+          <h1 id="top" data-rise>Pew Pal</h1>
+          <p class="hero-tagline" data-rise>Your Catholic Mass Companion</p>
+          <p class="hero-meta" data-rise>iPhone &middot; iPad &middot; Android &middot; Works offline</p>
+          <div class="badges" data-rise>
+            <a href="https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&amp;ct=support-site&amp;mt=8"><img class="as" src="badges/app-store-en-us.svg" alt="Download on the App Store"></a>
+            <a href="https://play.google.com/store/apps/details?id=com.pewpal.app&amp;referrer=utm_source%3Dsupport-site"><img class="gp" src="badges/google-play-en-us.png" alt="Get it on Google Play"></a>
+          </div>
+        </div>
+      </header>
 
-        <div class="features">
+      <div class="block">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker center">Inside the app</p>
             <h2>Features</h2>
-
-            <div class="feature">
-                <span class="feature-icon">📖</span>
-                <div class="feature-text">
-                    <h3>Complete Mass Texts (Novus Ordo + TLM)</h3>
-                    <p>Follow along with the Novus Ordo Mass and 1962 Traditional Latin Mass</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🌍</span>
-                <div class="feature-text">
-                    <h3>Multilingual Support</h3>
-                    <p>English, Portuguese, Spanish, Latin, or side-by-side display for easy following</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🙏</span>
-                <div class="feature-text">
-                    <h3>All Eucharistic Prayers</h3>
-                    <p>10 Eucharistic Prayers including the Roman Canon</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">⭐</span>
-                <div class="feature-text">
-                    <h3>Marian Prayers</h3>
-                    <p>Seasonal antiphons and traditional Marian devotions</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">✨</span>
-                <div class="feature-text">
-                    <h3>Benediction</h3>
-                    <p>Complete prayers for Benediction of the Blessed Sacrament</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🕯️</span>
-                <div class="feature-text">
-                    <h3>Breviary</h3>
-                    <p>Pray the Liturgy of the Hours with the Little Office of the Blessed Virgin Mary</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">📿</span>
-                <div class="feature-text">
-                    <h3>The Rosary</h3>
-                    <p>All four sets of mysteries with meditations for every decade</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🌹</span>
-                <div class="feature-text">
-                    <h3>Litany of Loreto &amp; Fatima Prayers</h3>
-                    <p>The full Litany of Loreto and the traditional Fatima prayers</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">📱</span>
-                <div class="feature-text">
-                    <h3>Offline & Private</h3>
-                    <p>Works offline with no data collection or tracking</p>
-                </div>
-            </div>
+          </div>
+          <div class="grid">
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.6C10.4 5.3 8.2 4.7 5 4.7v12.6c3.2 0 5.4.6 7 1.9 1.6-1.3 3.8-1.9 7-1.9V4.7c-3.2 0-5.4.6-7 1.9Z"/><path d="M12 6.6v12.6"/></svg></span>
+              <h3>Complete Mass Texts (Novus Ordo + TLM)</h3>
+              <p>Follow along with the Novus Ordo Mass and 1962 Traditional Latin Mass</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M4.4 9.4h15.2M4.4 14.6h15.2"/><path d="M12 4c2.1 2.2 3.2 5 3.2 8s-1.1 5.8-3.2 8c-2.1-2.2-3.2-5-3.2-8S9.9 6.2 12 4Z"/></svg></span>
+              <h3>Multilingual Support</h3>
+              <p>English, Portuguese, Spanish, Latin, or side-by-side display for easy following</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.6 4h10.8l-.7 4.3A5 5 0 0 1 12 12.5a5 5 0 0 1-4.7-4.2L6.6 4Z"/><path d="M12 12.5V17"/><path d="M9.2 20c0-1.6 1.2-3 2.8-3s2.8 1.4 2.8 3"/><path d="M7.8 20h8.4"/></svg></span>
+              <h3>All Eucharistic Prayers</h3>
+              <p>10 Eucharistic Prayers including the Roman Canon</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.4 14.3 8.6l5.7.55-4.3 3.8 1.25 5.6L12 15.6l-4.95 2.95 1.25-5.6-4.3-3.8 5.7-.55L12 3.4Z"/></svg></span>
+              <h3>Marian Prayers</h3>
+              <p>Seasonal antiphons and traditional Marian devotions</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="9" r="3.2"/><path d="M12 4.8V3.4M7.8 9H6.4M16.2 9h1.4M14.97 6.03l.99-.99M9.03 6.03l-.99-.99M14.97 11.97l.99.99M9.03 11.97l-.99.99"/><path d="M12 12.2V17"/><path d="M9.4 20h5.2"/><path d="M10.2 17h3.6l.8 3h-5.2l.8-3Z"/></svg></span>
+              <h3>Benediction</h3>
+              <p>Complete prayers for Benediction of the Blessed Sacrament</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2c1.4 1.7 2.1 2.9 2.1 3.9a2.1 2.1 0 1 1-4.2 0c0-1 .7-2.2 2.1-3.9Z"/><path d="M12 9.1v1.1"/><rect x="8.7" y="10.2" width="6.6" height="10" rx="1.3"/></svg></span>
+              <h3>Breviary</h3>
+              <p>Pray the Liturgy of the Hours with the Little Office of the Blessed Virgin Mary</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8.6" r="5.4" stroke-dasharray="0.1 2.73" stroke-linecap="round" stroke-width="2.1"/><path d="M12 14.6v2.6"/><path d="M12 17.2v4.2M10.1 18.9h3.8"/></svg></span>
+              <h3>The Rosary</h3>
+              <p>All four sets of mysteries with meditations for every decade</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4.6a3.1 3.1 0 0 1 0 6.2 2.2 2.2 0 0 1 0-4.4c.7 0 1.3.5 1.3 1.2"/><path d="M12 10.8V20.4"/><path d="M12 14.4c-1.1-1.6-2.7-2.2-4.4-2 .2 1.8 1.5 3 3.2 3.2"/><path d="M12 17.2c1.1-1.6 2.7-2.2 4.4-2-.2 1.8-1.5 3-3.2 3.2"/></svg></span>
+              <h3>Litany of Loreto &amp; Fatima Prayers</h3>
+              <p>The full Litany of Loreto and the traditional Fatima prayers</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2 5.6 5.9v5.3c0 4 2.6 7.6 6.4 9.6 3.8-2 6.4-5.6 6.4-9.6V5.9L12 3.2Z"/><path d="M12 8.4v6.4M9.5 10.7h5"/></svg></span>
+              <h3>Offline & Private</h3>
+              <p>Works offline with no data collection or tracking</p>
+            </article>
+          </div>
         </div>
+      </div>
 
-        <div class="store-badges">
-            <a href="https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&amp;ct=support-site&amp;mt=8" class="app-store-badge">
-                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store">
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.pewpal.app&amp;referrer=utm_source%3Dsupport-site" class="play-badge">
-                <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
-            </a>
+      <div class="vow">
+        <div class="wrap">
+          <p>No ads. No accounts. <span class="em">No tracking.</span></p>
         </div>
+      </div>
 
-        <div class="links">
-            <a href="examen.html">Examination of Conscience</a>
+      <div class="block alt">
+        <div class="wrap narrow">
+          <div class="section-head center">
+            <p class="kicker center">Good to know</p>
+            <h2>Common questions</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>Does the app work offline?</summary>
+              <p>Yes. Pew Pal works offline with no data collection or tracking. Every liturgical text is bundled with the app, so nothing has to be downloaded during Mass and no signal is needed. We do not integrate any third-party analytics, advertising, or tracking services, and your preferences are stored locally on your device and never leave it.</p>
+            </details>
+            <details>
+              <summary>What does the subscription include, and what does it cost?</summary>
+              <p>One subscription unlocks all of the app&rsquo;s content: Novus Ordo Mass texts, Traditional Latin Mass (1962) texts, Eucharistic Prayers, Marian prayers and antiphons, and Benediction prayers. Pew Pal Yearly is $9.99 per year (USD) and Pew Pal Monthly is $1.99 per month (USD). Subscriptions auto-renew unless cancelled. See the <a href="terms.html">Terms of Use</a> for the full subscription terms.</p>
+            </details>
+            <details>
+              <summary>Is there a free trial?</summary>
+              <p>Yes. New subscribers are eligible for a free trial &mdash; 1 month on the yearly plan, 7 days on the monthly plan. If you do not cancel before the trial ends, your subscription will automatically convert to a paid subscription and you will be charged the subscription price.</p>
+            </details>
+            <details>
+              <summary>How do I cancel or manage my subscription?</summary>
+              <p>Through the store you purchased from, at any time. On iPhone or iPad, open the Settings app, tap your name, tap &ldquo;Subscriptions&rdquo;, then find Pew Pal and tap &ldquo;Cancel Subscription&rdquo;. On Android, open the Google Play app, tap your profile picture, tap &ldquo;Payments &amp; subscriptions&rdquo; then &ldquo;Subscriptions&rdquo;, and find Pew Pal. Cancellation takes effect at the end of the current billing period, and you keep access until then. Refunds are handled by the store you purchased from &mdash; see the <a href="terms.html">Terms of Use</a>.</p>
+            </details>
+            <details>
+              <summary>Which languages does the app support?</summary>
+              <p>English, Portuguese and Spanish, plus the Latin of the Mass. You can read one language on its own, read the Latin on its own, or use the side-by-side display to follow both at once &mdash; and switch at any time from the app&rsquo;s Settings screen.</p>
+            </details>
+            <details>
+              <summary>Which Mass forms are included?</summary>
+              <p>Both. Pew Pal carries the complete Novus Ordo Mass texts and the Traditional Latin Mass (1962) texts, together with all ten Eucharistic Prayers including the Roman Canon. All liturgical content is provided for personal devotional use and is based on approved liturgical texts of the Catholic Church.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="wrap narrow">
+          <div class="contact-card">
+            <p class="kicker center">Support</p>
+            <h2>Write to us</h2>
+            <p>A question about your subscription, a correction to a text, or something you would like the app to carry &mdash; every message is read by the person who builds Pew Pal.</p>
+            <a class="mail" href="mailto:braniapps@gmail.com">braniapps@gmail.com</a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <div class="wrap">
+          <a class="brand" href="index.html">
+            <img src="app-icon.png" alt="" class="brand-mark">
+            Pew Pal
+          </a>
+          <div class="foot-links">
             <a href="privacy.html">Privacy Policy</a>
             <a href="terms.html">Terms of Use</a>
+            <a href="examen.html">Examination of Conscience</a>
             <a href="mailto:braniapps@gmail.com">Contact</a>
+          </div>
+          <p class="note"><em>Totus Tuus</em></p>
+          <p class="cr">&copy; 2026 Pew Pal &middot; Catholic Mass Companion</p>
         </div>
+      </footer>
+    </section>
+    <section data-lang="pt" id="portugues" lang="pt-BR">
+      <header class="hero-midnight">
+        <div class="wrap">
+          <img src="app-icon.png" alt="Pew Pal" class="hero-icon" data-rise>
+          <h1 data-rise>Pew Pal</h1>
+          <p class="hero-tagline" data-rise>Seu companheiro para a Santa Missa</p>
+          <p class="hero-meta" data-rise>iPhone &middot; iPad &middot; Android &middot; Funciona offline</p>
+          <div class="badges" data-rise>
+            <a href="https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&amp;ct=support-site&amp;mt=8"><img class="as" src="badges/app-store-pt-br.svg" alt="Baixar na App Store"></a>
+            <a href="https://play.google.com/store/apps/details?id=com.pewpal.app&amp;referrer=utm_source%3Dsupport-site"><img class="gp" src="badges/google-play-pt-br.png" alt="Disponível no Google Play"></a>
+          </div>
+        </div>
+      </header>
 
-        <hr class="lang-divider">
-
-        <p class="tagline">Seu companheiro para a Santa Missa</p>
-
-        <div class="features">
+      <div class="block">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker center">Dentro do aplicativo</p>
             <h2>Recursos</h2>
-
-            <div class="feature">
-                <span class="feature-icon">📖</span>
-                <div class="feature-text">
-                    <h3>Textos completos da Missa (Novus Ordo + Tridentina)</h3>
-                    <p>Acompanhe a Missa no rito Novus Ordo e a Missa Tridentina de 1962</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🌍</span>
-                <div class="feature-text">
-                    <h3>Suporte a idiomas</h3>
-                    <p>Português, inglês, espanhol, latim ou exibição lado a lado para acompanhar com facilidade</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🙏</span>
-                <div class="feature-text">
-                    <h3>Todas as Orações Eucarísticas</h3>
-                    <p>10 Orações Eucarísticas, incluindo o Cânon Romano</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">⭐</span>
-                <div class="feature-text">
-                    <h3>Orações marianas</h3>
-                    <p>Antífonas do tempo litúrgico e devoções marianas tradicionais</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">✨</span>
-                <div class="feature-text">
-                    <h3>Bênção do Santíssimo</h3>
-                    <p>Orações completas da Bênção do Santíssimo Sacramento</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🕯️</span>
-                <div class="feature-text">
-                    <h3>Breviário</h3>
-                    <p>Reze a Liturgia das Horas com o Pequeno Ofício de Nossa Senhora</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">📿</span>
-                <div class="feature-text">
-                    <h3>O Rosário</h3>
-                    <p>Os quatro conjuntos de mistérios com meditações para cada dezena</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🌹</span>
-                <div class="feature-text">
-                    <h3>Ladainha de Nossa Senhora e Orações de Fátima</h3>
-                    <p>A Ladainha de Nossa Senhora completa e as tradicionais orações de Fátima</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">📱</span>
-                <div class="feature-text">
-                    <h3>Offline e privado</h3>
-                    <p>Funciona offline, sem coleta de dados nem rastreamento</p>
-                </div>
-            </div>
+          </div>
+          <div class="grid">
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.6C10.4 5.3 8.2 4.7 5 4.7v12.6c3.2 0 5.4.6 7 1.9 1.6-1.3 3.8-1.9 7-1.9V4.7c-3.2 0-5.4.6-7 1.9Z"/><path d="M12 6.6v12.6"/></svg></span>
+              <h3>Textos completos da Missa (Novus Ordo + Tridentina)</h3>
+              <p>Acompanhe a Missa no rito Novus Ordo e a Missa Tridentina de 1962</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M4.4 9.4h15.2M4.4 14.6h15.2"/><path d="M12 4c2.1 2.2 3.2 5 3.2 8s-1.1 5.8-3.2 8c-2.1-2.2-3.2-5-3.2-8S9.9 6.2 12 4Z"/></svg></span>
+              <h3>Suporte a idiomas</h3>
+              <p>Português, inglês, espanhol, latim ou exibição lado a lado para acompanhar com facilidade</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.6 4h10.8l-.7 4.3A5 5 0 0 1 12 12.5a5 5 0 0 1-4.7-4.2L6.6 4Z"/><path d="M12 12.5V17"/><path d="M9.2 20c0-1.6 1.2-3 2.8-3s2.8 1.4 2.8 3"/><path d="M7.8 20h8.4"/></svg></span>
+              <h3>Todas as Orações Eucarísticas</h3>
+              <p>10 Orações Eucarísticas, incluindo o Cânon Romano</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.4 14.3 8.6l5.7.55-4.3 3.8 1.25 5.6L12 15.6l-4.95 2.95 1.25-5.6-4.3-3.8 5.7-.55L12 3.4Z"/></svg></span>
+              <h3>Orações marianas</h3>
+              <p>Antífonas do tempo litúrgico e devoções marianas tradicionais</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="9" r="3.2"/><path d="M12 4.8V3.4M7.8 9H6.4M16.2 9h1.4M14.97 6.03l.99-.99M9.03 6.03l-.99-.99M14.97 11.97l.99.99M9.03 11.97l-.99.99"/><path d="M12 12.2V17"/><path d="M9.4 20h5.2"/><path d="M10.2 17h3.6l.8 3h-5.2l.8-3Z"/></svg></span>
+              <h3>Bênção do Santíssimo</h3>
+              <p>Orações completas da Bênção do Santíssimo Sacramento</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2c1.4 1.7 2.1 2.9 2.1 3.9a2.1 2.1 0 1 1-4.2 0c0-1 .7-2.2 2.1-3.9Z"/><path d="M12 9.1v1.1"/><rect x="8.7" y="10.2" width="6.6" height="10" rx="1.3"/></svg></span>
+              <h3>Breviário</h3>
+              <p>Reze a Liturgia das Horas com o Pequeno Ofício de Nossa Senhora</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8.6" r="5.4" stroke-dasharray="0.1 2.73" stroke-linecap="round" stroke-width="2.1"/><path d="M12 14.6v2.6"/><path d="M12 17.2v4.2M10.1 18.9h3.8"/></svg></span>
+              <h3>O Rosário</h3>
+              <p>Os quatro conjuntos de mistérios com meditações para cada dezena</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4.6a3.1 3.1 0 0 1 0 6.2 2.2 2.2 0 0 1 0-4.4c.7 0 1.3.5 1.3 1.2"/><path d="M12 10.8V20.4"/><path d="M12 14.4c-1.1-1.6-2.7-2.2-4.4-2 .2 1.8 1.5 3 3.2 3.2"/><path d="M12 17.2c1.1-1.6 2.7-2.2 4.4-2-.2 1.8-1.5 3-3.2 3.2"/></svg></span>
+              <h3>Ladainha de Nossa Senhora e Orações de Fátima</h3>
+              <p>A Ladainha de Nossa Senhora completa e as tradicionais orações de Fátima</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2 5.6 5.9v5.3c0 4 2.6 7.6 6.4 9.6 3.8-2 6.4-5.6 6.4-9.6V5.9L12 3.2Z"/><path d="M12 8.4v6.4M9.5 10.7h5"/></svg></span>
+              <h3>Offline e privado</h3>
+              <p>Funciona offline, sem coleta de dados nem rastreamento</p>
+            </article>
+          </div>
         </div>
+      </div>
 
-        <div class="store-badges">
-            <a href="https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&amp;ct=support-site&amp;mt=8" class="app-store-badge">
-                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/pt-br?size=250x83" alt="Baixar na App Store">
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.pewpal.app&amp;referrer=utm_source%3Dsupport-site" class="play-badge">
-                <img src="https://play.google.com/intl/pt-BR/badges/static/images/badges/pt-br_badge_web_generic.png" alt="Disponível no Google Play">
-            </a>
+      <div class="vow">
+        <div class="wrap">
+          <p>Sem anúncios. Sem contas. <span class="em">Sem rastreamento.</span></p>
         </div>
+      </div>
 
-        <div class="links">
+      <div class="block alt">
+        <div class="wrap narrow">
+          <div class="section-head center">
+            <p class="kicker center">Bom saber</p>
+            <h2>Perguntas frequentes</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>O aplicativo funciona offline?</summary>
+              <p>Sim. O Pew Pal funciona offline, sem coleta de dados nem rastreamento. Todo texto litúrgico vem junto com o aplicativo, portanto nada precisa ser baixado durante a Missa e nenhum sinal é necessário. Não integramos nenhum serviço de análise, publicidade ou rastreamento de terceiros, e suas preferências são armazenadas localmente no seu dispositivo e nunca saem do seu aparelho.</p>
+            </details>
+            <details>
+              <summary>O que a assinatura inclui e quanto custa?</summary>
+              <p>Uma assinatura libera todo o conteúdo do aplicativo: textos da Missa (Novus Ordo), textos da Missa Tridentina (1962), Orações Eucarísticas, orações e antífonas marianas e orações da Bênção do Santíssimo Sacramento. O Pew Pal Anual custa US$ 9,99 por ano e o Pew Pal Mensal custa US$ 1,99 por mês (ou o valor equivalente em reais exibido na App Store). As assinaturas são renovadas automaticamente, salvo cancelamento. Consulte os <a href="terms.html#portugues">Termos de Uso</a> para os termos completos.</p>
+            </details>
+            <details>
+              <summary>Existe teste grátis?</summary>
+              <p>Sim. Novos assinantes têm direito a um teste grátis &mdash; 1 mês no plano anual, 7 dias no plano mensal. Se você não cancelar antes do fim do teste, sua assinatura será convertida automaticamente em uma assinatura paga e você será cobrado pelo preço da assinatura.</p>
+            </details>
+            <details>
+              <summary>Como cancelo ou gerencio minha assinatura?</summary>
+              <p>Pela loja em que você fez a compra, a qualquer momento. No iPhone ou iPad, abra o app Ajustes, toque no seu nome, toque em &ldquo;Assinaturas&rdquo;, encontre o Pew Pal e toque em &ldquo;Cancelar assinatura&rdquo;. No Android, abra o app Google Play, toque na sua foto de perfil, toque em &ldquo;Pagamentos e assinaturas&rdquo; e depois em &ldquo;Assinaturas&rdquo;, e encontre o Pew Pal. O cancelamento entra em vigor ao final do período de cobrança atual, e você continua com acesso até lá. Os reembolsos são tratados pela loja em que você fez a compra &mdash; veja os <a href="terms.html#portugues">Termos de Uso</a>.</p>
+            </details>
+            <details>
+              <summary>Quais idiomas o aplicativo oferece?</summary>
+              <p>Português, inglês e espanhol, além do latim da Missa. Você pode ler em um só idioma, ler apenas o latim ou usar a exibição lado a lado para acompanhar os dois ao mesmo tempo &mdash; e trocar quando quiser na tela de Ajustes do aplicativo.</p>
+            </details>
+            <details>
+              <summary>Quais formas da Missa estão incluídas?</summary>
+              <p>Ambas. O Pew Pal traz os textos completos da Missa no rito Novus Ordo e os textos da Missa Tridentina (1962), com as dez Orações Eucarísticas, incluindo o Cânon Romano. Todo o conteúdo litúrgico é fornecido para uso devocional pessoal e baseia-se em textos litúrgicos aprovados da Igreja Católica.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="wrap narrow">
+          <div class="contact-card">
+            <p class="kicker center">Suporte</p>
+            <h2>Fale conosco</h2>
+            <p>Uma dúvida sobre a assinatura, uma correção em algum texto ou algo que você gostaria de ver no aplicativo &mdash; cada mensagem é lida por quem desenvolve o Pew Pal.</p>
+            <a class="mail" href="mailto:braniapps@gmail.com">braniapps@gmail.com</a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <div class="wrap">
+          <a class="brand" href="index.html">
+            <img src="app-icon.png" alt="" class="brand-mark">
+            Pew Pal
+          </a>
+          <div class="foot-links">
             <a href="privacy.html#portugues">Política de Privacidade</a>
             <a href="terms.html#portugues">Termos de Uso</a>
+            <a href="examen.html#portugues">Exame de Consciência</a>
             <a href="mailto:braniapps@gmail.com">Contato</a>
+          </div>
+          <p class="note"><em>Totus Tuus</em></p>
+          <p class="cr">&copy; 2026 Pew Pal &middot; Companheiro da Missa Católica</p>
         </div>
+      </footer>
+    </section>
+    <section data-lang="es" id="espanol" lang="es">
+      <header class="hero-midnight">
+        <div class="wrap">
+          <img src="app-icon.png" alt="Pew Pal" class="hero-icon" data-rise>
+          <h1 data-rise>Pew Pal</h1>
+          <p class="hero-tagline" data-rise>Tu compañero para la Santa Misa</p>
+          <p class="hero-meta" data-rise>iPhone &middot; iPad &middot; Android &middot; Funciona sin conexión</p>
+          <div class="badges" data-rise>
+            <a href="https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&amp;ct=support-site&amp;mt=8"><img class="as" src="badges/app-store-es-mx.svg" alt="Descárgalo en el App Store"></a>
+            <a href="https://play.google.com/store/apps/details?id=com.pewpal.app&amp;referrer=utm_source%3Dsupport-site"><img class="gp" src="badges/google-play-es.png" alt="Disponible en Google Play"></a>
+          </div>
+        </div>
+      </header>
 
-        <hr class="lang-divider">
-
-        <p class="tagline">Tu compañero para la Santa Misa</p>
-
-        <div class="features">
+      <div class="block">
+        <div class="wrap">
+          <div class="section-head center">
+            <p class="kicker center">Dentro de la aplicación</p>
             <h2>Funciones</h2>
-
-            <div class="feature">
-                <span class="feature-icon">📖</span>
-                <div class="feature-text">
-                    <h3>Textos completos de la Misa (Novus Ordo + Tradicional)</h3>
-                    <p>Sigue la Misa en el rito Novus Ordo y la Misa tradicional en latín de 1962</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🌍</span>
-                <div class="feature-text">
-                    <h3>Compatibilidad con varios idiomas</h3>
-                    <p>Español, inglés, portugués, latín o visualización en paralelo para seguir con facilidad</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🙏</span>
-                <div class="feature-text">
-                    <h3>Todas las plegarias eucarísticas</h3>
-                    <p>10 plegarias eucarísticas, incluido el Canon Romano</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">⭐</span>
-                <div class="feature-text">
-                    <h3>Oraciones marianas</h3>
-                    <p>Antífonas del tiempo litúrgico y devociones marianas tradicionales</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">✨</span>
-                <div class="feature-text">
-                    <h3>Bendición con el Santísimo</h3>
-                    <p>Oraciones completas de la Bendición con el Santísimo Sacramento</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🕯️</span>
-                <div class="feature-text">
-                    <h3>Breviario</h3>
-                    <p>Reza la Liturgia de las Horas con el Pequeño Oficio de Nuestra Señora</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">📿</span>
-                <div class="feature-text">
-                    <h3>El Rosario</h3>
-                    <p>Los cuatro conjuntos de misterios con meditaciones para cada decena</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">🌹</span>
-                <div class="feature-text">
-                    <h3>Letanía de Loreto y oraciones de Fátima</h3>
-                    <p>La Letanía de Loreto completa y las tradicionales oraciones de Fátima</p>
-                </div>
-            </div>
-
-            <div class="feature">
-                <span class="feature-icon">📱</span>
-                <div class="feature-text">
-                    <h3>Sin conexión y privado</h3>
-                    <p>Funciona sin conexión, sin recopilación de datos ni seguimiento</p>
-                </div>
-            </div>
+          </div>
+          <div class="grid">
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.6C10.4 5.3 8.2 4.7 5 4.7v12.6c3.2 0 5.4.6 7 1.9 1.6-1.3 3.8-1.9 7-1.9V4.7c-3.2 0-5.4.6-7 1.9Z"/><path d="M12 6.6v12.6"/></svg></span>
+              <h3>Textos completos de la Misa (Novus Ordo + Tradicional)</h3>
+              <p>Sigue la Misa en el rito Novus Ordo y la Misa tradicional en latín de 1962</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M4.4 9.4h15.2M4.4 14.6h15.2"/><path d="M12 4c2.1 2.2 3.2 5 3.2 8s-1.1 5.8-3.2 8c-2.1-2.2-3.2-5-3.2-8S9.9 6.2 12 4Z"/></svg></span>
+              <h3>Compatibilidad con varios idiomas</h3>
+              <p>Español, inglés, portugués, latín o visualización en paralelo para seguir con facilidad</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.6 4h10.8l-.7 4.3A5 5 0 0 1 12 12.5a5 5 0 0 1-4.7-4.2L6.6 4Z"/><path d="M12 12.5V17"/><path d="M9.2 20c0-1.6 1.2-3 2.8-3s2.8 1.4 2.8 3"/><path d="M7.8 20h8.4"/></svg></span>
+              <h3>Todas las plegarias eucarísticas</h3>
+              <p>10 plegarias eucarísticas, incluido el Canon Romano</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.4 14.3 8.6l5.7.55-4.3 3.8 1.25 5.6L12 15.6l-4.95 2.95 1.25-5.6-4.3-3.8 5.7-.55L12 3.4Z"/></svg></span>
+              <h3>Oraciones marianas</h3>
+              <p>Antífonas del tiempo litúrgico y devociones marianas tradicionales</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="9" r="3.2"/><path d="M12 4.8V3.4M7.8 9H6.4M16.2 9h1.4M14.97 6.03l.99-.99M9.03 6.03l-.99-.99M14.97 11.97l.99.99M9.03 11.97l-.99.99"/><path d="M12 12.2V17"/><path d="M9.4 20h5.2"/><path d="M10.2 17h3.6l.8 3h-5.2l.8-3Z"/></svg></span>
+              <h3>Bendición con el Santísimo</h3>
+              <p>Oraciones completas de la Bendición con el Santísimo Sacramento</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2c1.4 1.7 2.1 2.9 2.1 3.9a2.1 2.1 0 1 1-4.2 0c0-1 .7-2.2 2.1-3.9Z"/><path d="M12 9.1v1.1"/><rect x="8.7" y="10.2" width="6.6" height="10" rx="1.3"/></svg></span>
+              <h3>Breviario</h3>
+              <p>Reza la Liturgia de las Horas con el Pequeño Oficio de Nuestra Señora</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8.6" r="5.4" stroke-dasharray="0.1 2.73" stroke-linecap="round" stroke-width="2.1"/><path d="M12 14.6v2.6"/><path d="M12 17.2v4.2M10.1 18.9h3.8"/></svg></span>
+              <h3>El Rosario</h3>
+              <p>Los cuatro conjuntos de misterios con meditaciones para cada decena</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4.6a3.1 3.1 0 0 1 0 6.2 2.2 2.2 0 0 1 0-4.4c.7 0 1.3.5 1.3 1.2"/><path d="M12 10.8V20.4"/><path d="M12 14.4c-1.1-1.6-2.7-2.2-4.4-2 .2 1.8 1.5 3 3.2 3.2"/><path d="M12 17.2c1.1-1.6 2.7-2.2 4.4-2-.2 1.8-1.5 3-3.2 3.2"/></svg></span>
+              <h3>Letanía de Loreto y oraciones de Fátima</h3>
+              <p>La Letanía de Loreto completa y las tradicionales oraciones de Fátima</p>
+            </article>
+            <article class="feature" data-rise>
+              <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2 5.6 5.9v5.3c0 4 2.6 7.6 6.4 9.6 3.8-2 6.4-5.6 6.4-9.6V5.9L12 3.2Z"/><path d="M12 8.4v6.4M9.5 10.7h5"/></svg></span>
+              <h3>Sin conexión y privado</h3>
+              <p>Funciona sin conexión, sin recopilación de datos ni seguimiento</p>
+            </article>
+          </div>
         </div>
+      </div>
 
-        <div class="store-badges">
-            <a href="https://apps.apple.com/app/apple-store/id6757607612?pt=121837520&amp;ct=support-site&amp;mt=8" class="app-store-badge">
-                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/es-mx?size=250x83" alt="Descárgalo en el App Store">
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.pewpal.app&amp;referrer=utm_source%3Dsupport-site" class="play-badge">
-                <img src="https://play.google.com/intl/es/badges/static/images/badges/es_badge_web_generic.png" alt="Disponible en Google Play">
-            </a>
+      <div class="vow">
+        <div class="wrap">
+          <p>Sin anuncios. Sin cuentas. <span class="em">Sin seguimiento.</span></p>
         </div>
+      </div>
 
-        <div class="links">
+      <div class="block alt">
+        <div class="wrap narrow">
+          <div class="section-head center">
+            <p class="kicker center">Conviene saber</p>
+            <h2>Preguntas frecuentes</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>¿La aplicación funciona sin conexión?</summary>
+              <p>Sí. Pew Pal funciona sin conexión, sin recopilación de datos ni seguimiento. Todos los textos litúrgicos vienen incluidos en la aplicación, así que no hace falta descargar nada durante la Misa ni tener señal. No integramos ningún servicio de análisis, publicidad o seguimiento de terceros, y sus preferencias se almacenan localmente en su dispositivo y nunca salen de su aparato.</p>
+            </details>
+            <details>
+              <summary>¿Qué incluye la suscripción y cuánto cuesta?</summary>
+              <p>Una suscripción desbloquea todo el contenido de la aplicación: textos de la Misa (Novus Ordo), textos de la Misa tradicional en latín (1962), plegarias eucarísticas, oraciones y antífonas marianas y oraciones de la Bendición con el Santísimo Sacramento. Pew Pal Anual cuesta US$ 9.99 al año y Pew Pal Mensual cuesta US$ 1.99 al mes (o el importe equivalente en la moneda local que se muestre en la App Store). Las suscripciones se renuevan automáticamente, salvo cancelación. Consulte los <a href="terms.html#espanol">Términos de Uso</a> para conocer los términos completos.</p>
+            </details>
+            <details>
+              <summary>¿Hay una prueba gratuita?</summary>
+              <p>Sí. Los nuevos suscriptores tienen derecho a una prueba gratuita: 1 mes en el plan anual, 7 días en el plan mensual. Si no cancela antes de que finalice la prueba, su suscripción se convertirá automáticamente en una suscripción de pago y se le cobrará el precio de la suscripción.</p>
+            </details>
+            <details>
+              <summary>¿Cómo cancelo o gestiono mi suscripción?</summary>
+              <p>A través de la tienda donde realizó la compra, en cualquier momento. En iPhone o iPad, abra la app Ajustes, toque su nombre, toque &ldquo;Suscripciones&rdquo;, busque Pew Pal y toque &ldquo;Cancelar suscripción&rdquo;. En Android, abra la app Google Play, toque su foto de perfil, toque &ldquo;Pagos y suscripciones&rdquo; y después &ldquo;Suscripciones&rdquo;, y busque Pew Pal. La cancelación entra en vigor al final del período de facturación en curso y usted conserva el acceso hasta entonces. Los reembolsos los gestiona la tienda donde realizó la compra &mdash; consulte los <a href="terms.html#espanol">Términos de Uso</a>.</p>
+            </details>
+            <details>
+              <summary>¿Qué idiomas admite la aplicación?</summary>
+              <p>Español, inglés y portugués, además del latín de la Misa. Puede leer en un solo idioma, leer solo el latín o usar la visualización en paralelo para seguir ambos a la vez &mdash; y cambiar cuando quiera desde la pantalla de Ajustes de la aplicación.</p>
+            </details>
+            <details>
+              <summary>¿Qué formas de la Misa se incluyen?</summary>
+              <p>Ambas. Pew Pal incluye los textos completos de la Misa en el rito Novus Ordo y los textos de la Misa tradicional en latín (1962), junto con las diez plegarias eucarísticas, incluido el Canon Romano. Todo el contenido litúrgico se ofrece para uso devocional personal y se basa en textos litúrgicos aprobados de la Iglesia católica.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="wrap narrow">
+          <div class="contact-card">
+            <p class="kicker center">Soporte</p>
+            <h2>Escríbanos</h2>
+            <p>Una duda sobre su suscripción, una corrección en algún texto o algo que le gustaría que la aplicación incluyera &mdash; cada mensaje lo lee quien desarrolla Pew Pal.</p>
+            <a class="mail" href="mailto:braniapps@gmail.com">braniapps@gmail.com</a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <div class="wrap">
+          <a class="brand" href="index.html">
+            <img src="app-icon.png" alt="" class="brand-mark">
+            Pew Pal
+          </a>
+          <div class="foot-links">
             <a href="privacy.html#espanol">Política de Privacidad</a>
             <a href="terms.html#espanol">Términos de Uso</a>
+            <a href="examen.html#espanol">Examen de Conciencia</a>
             <a href="mailto:braniapps@gmail.com">Contacto</a>
+          </div>
+          <p class="note"><em>Totus Tuus</em></p>
+          <p class="cr">&copy; 2026 Pew Pal &middot; Compañero de la Misa católica</p>
         </div>
-
-        <div class="footer">
-            <p><em>Totus Tuus</em></p>
-        </div>
-    </div>
+      </footer>
+    </section>
+  </main>
 </body>
 </html>
