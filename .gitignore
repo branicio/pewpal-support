@@ -1,0 +1,5 @@
+# Internal scaffolding — never publish to the Pages site
+.superpowers/
+
+# macOS
+.DS_Store
