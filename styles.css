@@ -893,7 +893,11 @@ strong, b { font-weight: 600; }
 
 /* ------------------------------------------- resource list (examen page) */
 
-.reslist { display: grid; grid-template-columns: repeat(auto-fit, minmax(292px, 1fr)); gap: 16px; }
+/* min(292px, 100%) lets the track collapse below 292px on very narrow
+   viewports (320px) instead of forcing overflow -- the classic CSS Grid
+   minmax() trap, where a bare px floor cannot shrink past itself even when
+   the viewport is narrower than the floor. */
+.reslist { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(292px, 100%), 1fr)); gap: 16px; }
 
 .rescard {
   position: relative;
