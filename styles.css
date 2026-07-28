@@ -354,7 +354,7 @@ strong, b { font-weight: 600; }
 }
 
 .nav-right { display: flex; align-items: center; gap: 22px; }
-.nav-links { display: flex; align-items: center; gap: 24px; }
+.nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 24px; }
 .nav-links a {
   font-size: 0.86rem;
   letter-spacing: 0.03em;
@@ -367,9 +367,9 @@ strong, b { font-weight: 600; }
    so they must survive on a phone rather than being hidden the way a purely
    decorative nav could be. Instead of `display:none` they drop to their own
    full-width second row (the .nav .wrap is already `flex-wrap:wrap`), which at
-   390px measures ~236px of text in English and ~280px in Portuguese/Spanish
-   against ~334px of available width — and wraps harmlessly if a translation
-   ever outgrows that. `order:3` puts them BELOW the brand + langtabs row
+   390px still fits on one line, and `flex-wrap:wrap` on .nav-links lets them
+   spill onto a second line rather than overflow when they do not — which the
+   longer "Examination of Conscience" label makes happen at 320px. `order:3` puts them BELOW the brand + langtabs row
    rather than between them. */
 @media (max-width: 760px) {
   .nav .wrap { min-height: 0; padding-top: 9px; padding-bottom: 9px; row-gap: 9px; }
