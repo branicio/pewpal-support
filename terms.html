@@ -9,24 +9,24 @@
   <script src="site.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#top" aria-label="Skip to content"></a>
+  <a class="skip-link" href="#top">Skip to content</a>
   <nav class="nav">
     <div class="wrap">
-      <a class="brand" href="index.html" aria-label="Pew Pal — home">
-        <img src="app-icon.png" alt="Pew Pal" class="brand-mark">
+      <a class="brand" href="index.html">
+        <img src="app-icon.png" alt="" class="brand-mark">
+        Pew Pal
       </a>
       <div class="nav-right">
         <div class="langtabs" role="tablist" aria-label="Language">
-          <button role="tab" data-lang-target="en" aria-label="English" title="English" style="min-width:2.6em;border:1px solid rgba(201,168,76,.45)"></button>
-          <button role="tab" data-lang-target="pt" aria-label="Português" title="Português" style="min-width:2.6em;border:1px solid rgba(201,168,76,.45)"></button>
-          <button role="tab" data-lang-target="es" aria-label="Español" title="Español" style="min-width:2.6em;border:1px solid rgba(201,168,76,.45)"></button>
+          <button role="tab" class="langtab" data-lang-target="en" aria-label="English">EN</button>
+          <button role="tab" class="langtab" data-lang-target="pt" aria-label="Português">PT</button>
+          <button role="tab" class="langtab" data-lang-target="es" aria-label="Español">ES</button>
         </div>
       </div>
     </div>
   </nav>
   <main>
     <section data-lang="en">
-      
       <div class="wrap narrow">
         <div class="legal-hero">
           <img src="app-icon.png" alt="Pew Pal" class="hero-icon">
@@ -132,9 +132,13 @@
           </div>
         </div>
       </div>
+      <footer class="foot">
+        <div class="wrap">
+          <p><em>Totus Tuus</em></p>
+        </div>
+      </footer>
     </section>
-    <section data-lang="pt">
-      <hr id="portugues" style="border:0;height:0;margin:0;padding:0" aria-hidden="true">
+    <section data-lang="pt" id="portugues">
       <div class="wrap narrow">
         <div class="legal-hero">
           <img src="app-icon.png" alt="Pew Pal" class="hero-icon">
@@ -240,9 +244,13 @@
           </div>
         </div>
       </div>
+      <footer class="foot">
+        <div class="wrap">
+          <p><em>Totus Tuus</em></p>
+        </div>
+      </footer>
     </section>
-    <section data-lang="es">
-      <hr id="espanol" style="border:0;height:0;margin:0;padding:0" aria-hidden="true">
+    <section data-lang="es" id="espanol">
       <div class="wrap narrow">
         <div class="legal-hero">
           <img src="app-icon.png" alt="Pew Pal" class="hero-icon">
@@ -348,12 +356,12 @@
           </div>
         </div>
       </div>
+      <div class="foot">
+        <div class="wrap">
+          <p><em>Totus Tuus</em></p>
+        </div>
+      </div>
     </section>
   </main>
-  <footer class="foot">
-    <div class="wrap">
-      <p><em>Totus Tuus</em></p>
-    </div>
-  </footer>
 </body>
 </html>
