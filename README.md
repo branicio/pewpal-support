@@ -33,6 +33,33 @@ canonical form.
 
 ---
 
+## Vendored store badges (`badges/`)
+
+The site loads **no third-party subresource anywhere** — fonts, the app icon and the six
+App Store / Google Play badges are all served from this repo. The badges are Apple's and
+Google's own artwork, downloaded byte-for-byte from:
+
+| File | Source |
+|---|---|
+| `badges/app-store-en-us.svg` | `https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83` |
+| `badges/app-store-pt-br.svg` | …same with `/pt-br` |
+| `badges/app-store-es-mx.svg` | …same with `/es-mx` |
+| `badges/google-play-en-us.png` | `https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png` |
+| `badges/google-play-pt-br.png` | …same with `intl/pt-BR` + `pt-br_badge_web_generic.png` |
+| `badges/google-play-es.png` | …same with `intl/es` + `es_badge_web_generic.png` |
+
+> **Never modify these files.** Apple's and Google's marketing guidelines permit hosting
+> their badge art but not altering it — no recolouring, cropping, rescaling or re-encoding,
+> and no running them through an image optimiser. Size them with CSS (`.badges .as/.gp`),
+> never by editing the file. To refresh, re-download from the URL above and commit the new
+> bytes unchanged.
+
+Hosting rather than hotlinking is deliberate: `tools.applemediaservices.com` is an API
+endpoint, not a stability contract, and local files remove two DNS+TLS handshakes from the
+home page.
+
+---
+
 ## Languages and anchors
 
 `privacy.html`, `terms.html` and `examen.html` are **single stacked trilingual pages**
