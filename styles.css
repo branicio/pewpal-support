@@ -1,0 +1,862 @@
+/* Pew Pal support site — "Illuminated Missal"
+   Cream parchment ground, deep navy ink, gold hairline rules.
+   EB Garamond (display + headings) over Inter (body + UI, 18px/1.7).
+
+   The palette is the app's own: navy linework and a gold pew on cream, with the
+   midnight #0F1B3D / gold #C9A84C pairing from the App Store screenshots. The
+   homepage opens on one full-bleed midnight band for drama; everything below it,
+   and every legal page, sits on cream so ~2,500 words of policy stay readable.
+
+   Every colour pair used for text is verified in verify/contrast.py.
+   Fonts are self-hosted — this stylesheet must never reference an external URL.
+
+   WEIGHT DISCIPLINE (the woff2 files are variable, with real limits):
+     EB Garamond roman  → 500–700 only
+     EB Garamond italic → 500 only  (asking for italic 600 forces a synthetic face)
+     Inter              → 400–600 only (never 700) */
+
+/* ------------------------------------------------------------------ fonts */
+
+@font-face{font-family:"EB Garamond";src:url("fonts/EBGaramond-latin.woff2") format("woff2");font-weight:500 700;font-style:normal;font-display:swap}
+@font-face{font-family:"EB Garamond";src:url("fonts/EBGaramond-italic-latin.woff2") format("woff2");font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:"Inter";src:url("fonts/Inter-latin.woff2") format("woff2");font-weight:400 600;font-style:normal;font-display:swap}
+
+/* ----------------------------------------------------------------- tokens */
+
+:root {
+  --serif: "EB Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+  --parchment:      #F7F1E3;
+  --parchment-deep: #F1EBDB;   /* alternating band; kept light enough for --gold-deep */
+  --card:           #FFFDF7;
+  --card-line:      rgba(22, 48, 92, 0.13);
+
+  --navy:           #16305C;   /* headings, links */
+  --navy-2:         #1D3E75;   /* link hover */
+  --navy-deep:      #0F1B3D;   /* the midnight band + every filled dark surface */
+  --navy-night:     #0C1220;   /* footer */
+
+  --gold:           #C9A84C;
+  --gold-soft:      #E3C368;
+  --gold-deep:      #80671B;   /* small gold text on light grounds — see header note */
+
+  --ink:            #221E18;
+  --ink-soft:       #565044;
+  --cream:          #F2E9D8;   /* body text on any dark ground */
+
+  --hair:           rgba(22, 48, 92, 0.14);
+  --gold-hair:      rgba(201, 168, 76, 0.45);
+  --glow-gold:      rgba(201, 168, 76, 0.13);
+  --glow-navy:      rgba(22, 48, 92, 0.09);
+
+  /* The footer is dark in BOTH schemes, so its ink stays literal and is never
+     flipped below — flipping it would put dark text on a dark ground. */
+  --foot-ink:       #C9BBA0;
+  --foot-dim:       #B0A187;
+  --foot-faint:     #9A8D76;
+
+  --shadow:       0 18px 50px -22px rgba(15, 27, 61, 0.42);
+  --shadow-lift:  0 26px 60px -24px rgba(15, 27, 61, 0.50);
+  --radius:       16px;
+  --radius-sm:    10px;
+  --ease:         cubic-bezier(.2, .7, .2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --parchment:      #0C1220;
+    --parchment-deep: #0A0F1A;
+    --card:           #131B2E;
+    --card-line:      rgba(227, 195, 104, 0.18);
+
+    --navy:           #AFC4EC;   /* headings lighten; the accent keeps its hue */
+    --navy-2:         #C6D6F3;
+    --navy-deep:      #111C3C;   /* still darker than card, so bands stay legible */
+    --navy-night:     #070B14;
+
+    --gold:           #E3C368;
+    --gold-soft:      #EED28A;
+    --gold-deep:      #E3C368;
+
+    --ink:            #F2E9D8;
+    --ink-soft:       #B3B9C7;
+
+    --hair:           rgba(175, 196, 236, 0.18);
+    --gold-hair:      rgba(227, 195, 104, 0.30);
+    --glow-gold:      rgba(227, 195, 104, 0.07);
+    --glow-navy:      rgba(120, 150, 210, 0.07);
+
+    --shadow:       0 20px 60px -26px rgba(0, 0, 0, 0.75);
+    --shadow-lift:  0 26px 70px -26px rgba(0, 0, 0, 0.85);
+  }
+}
+
+/* ------------------------------------------------------------------ reset */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+/* Anchored headings must clear the sticky nav. */
+[id] { scroll-margin-top: 88px; }
+
+img, svg { max-width: 100%; display: block; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+/* ------------------------------------------------------------- the ground */
+
+body {
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.7;
+  font-weight: 400;
+  color: var(--ink);
+  background-color: var(--parchment);
+  background-image:
+    radial-gradient(120% 78% at 50% -12%, var(--glow-gold), transparent 62%),
+    radial-gradient(100% 70% at 50% 118%, var(--glow-navy), transparent 60%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Fine paper grain over the whole ground. Sits BEHIND content (z-index 1 vs the
+   z-index 2 on .wrap) so it textures the page without dulling the type. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A//www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark) {
+  body::before { mix-blend-mode: screen; opacity: 0.3; }
+}
+
+/* ---------------------------------------------------------------- measure */
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 2;
+}
+.narrow { max-width: 764px; }
+
+/* ------------------------------------------------------------- typography */
+
+h1, h2, h3, h4, .display {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--navy);
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+a { color: var(--navy); text-decoration: none; }
+a:hover { color: var(--navy-2); }
+
+/* Prose links carry an underline so they never depend on colour alone. */
+p a, li a, .legal a, .faq a, .vow a {
+  text-decoration: underline;
+  text-decoration-color: var(--gold-hair);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+p a:hover, li a:hover, .legal a:hover, .faq a:hover, .vow a:hover {
+  text-decoration-color: var(--gold);
+}
+
+strong, b { font-weight: 600; }
+
+/* Letterspaced rubric label, flanked by gold rules — the recurring motif. */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.kicker::before {
+  content: "";
+  width: 36px; height: 1px; flex: none;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.kicker.center { justify-content: center; }
+.kicker.center::after {
+  content: "";
+  width: 36px; height: 1px; flex: none;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.hero-midnight .kicker, .foot .kicker { color: var(--gold-soft); }
+/* Tighten the rubric on narrow screens so the label keeps to one line and the
+   flanking rules stay beside it rather than stranded on separate lines. */
+@media (max-width: 460px) {
+  .kicker { gap: 10px; font-size: 0.66rem; letter-spacing: 0.2em; }
+  .kicker::before, .kicker.center::after { width: 22px; }
+}
+
+/* ------------------------------------------------------- a11y affordances */
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.hero-midnight :focus-visible, .foot :focus-visible { outline-color: var(--gold-soft); }
+/* Gold-on-gold would vanish, so the gold button rings in midnight instead. */
+.btn-gold:focus-visible { outline-color: var(--navy-deep); }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+}
+.skip-link:focus {
+  left: 14px; top: 14px;
+  z-index: 100;
+  background: var(--navy-deep);
+  color: var(--cream);
+  padding: 11px 18px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------- buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  padding: 13px 26px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .3s var(--ease), box-shadow .3s, background-color .3s,
+              color .3s, border-color .3s;
+}
+.btn:hover { transform: translateY(-2px); text-decoration: none; }
+
+.btn-gold {
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+  color: var(--navy-deep);
+  box-shadow: 0 12px 26px -14px rgba(201, 168, 76, 0.9);
+}
+.btn-gold:hover { color: var(--navy-deep); box-shadow: 0 17px 34px -14px rgba(201, 168, 76, 1); }
+
+.btn-ink { background: var(--navy-deep); color: var(--cream); }
+.btn-ink:hover { color: var(--cream); box-shadow: var(--shadow-lift); }
+
+.btn-ghost { background: transparent; border-color: var(--gold-hair); color: var(--navy); }
+.btn-ghost:hover { border-color: var(--gold); background: rgba(201, 168, 76, 0.09); }
+
+.hero-midnight .btn-ghost { color: var(--cream); border-color: rgba(242, 233, 216, 0.35); }
+.hero-midnight .btn-ghost:hover { border-color: var(--gold-soft); background: rgba(242, 233, 216, 0.08); }
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* -------------------------------------------------------------------- nav */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--parchment);                                 /* fallback */
+  background: color-mix(in srgb, var(--parchment) 84%, transparent);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--hair);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 68px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.brand:hover { color: var(--navy-2); text-decoration: none; }
+.brand img, .brand .brand-mark {
+  width: 30px; height: 30px;
+  flex: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px var(--gold-hair);
+}
+
+.nav-right { display: flex; align-items: center; gap: 22px; }
+.nav-links { display: flex; align-items: center; gap: 24px; }
+.nav-links a {
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+}
+.nav-links a:hover { color: var(--navy); }
+@media (max-width: 760px) { .nav-links { display: none; } }
+
+/* -------------------------------------------------------------- langtabs */
+
+/* Contract: .langtabs is a role="tablist"; each control is role="tab" with
+   aria-selected. .langtab is accepted as a class alias for the control.
+   The selected state carries THREE cues — fill, weight, and a gold underbar —
+   so it never depends on colour alone. */
+.langtabs {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--gold-hair);
+  border-radius: 999px;
+  background: var(--card);                                      /* fallback */
+  background: color-mix(in srgb, var(--card) 72%, transparent);
+}
+.langtabs [role="tab"], .langtabs .langtab {
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 9px 16px 10px;
+  border-radius: 999px;
+  transition: color .25s, background-color .25s;
+}
+.langtabs [role="tab"]:hover, .langtabs .langtab:hover {
+  color: var(--navy);
+  background: rgba(201, 168, 76, 0.12);
+}
+.langtabs [role="tab"][aria-selected="true"], .langtabs .langtab[aria-selected="true"] {
+  background: var(--navy-deep);
+  color: var(--cream);
+  font-weight: 600;
+}
+.langtabs [role="tab"][aria-selected="true"]:hover,
+.langtabs .langtab[aria-selected="true"]:hover {
+  background: var(--navy-deep);
+  color: var(--cream);
+}
+/* Non-colour cue: a gold underbar appears only on the selected tab. */
+.langtabs [role="tab"][aria-selected="true"]::after,
+.langtabs .langtab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 50%; bottom: 5px;
+  transform: translateX(-50%);
+  width: 16px; height: 2px;
+  border-radius: 1px;
+  background: var(--gold-soft);
+}
+
+.hero-midnight .langtabs { border-color: rgba(227, 195, 104, 0.4); background: rgba(242, 233, 216, 0.06); }
+.hero-midnight .langtabs [role="tab"] { color: rgba(242, 233, 216, 0.72); }
+.hero-midnight .langtabs [role="tab"][aria-selected="true"] { background: var(--gold); color: var(--navy-deep); }
+.hero-midnight .langtabs [role="tab"][aria-selected="true"]::after { background: var(--navy-deep); }
+
+/* ----------------------------------------------------- hero (midnight band) */
+
+.hero-midnight {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  text-align: center;
+  color: var(--cream);
+  background-color: var(--navy-deep);
+  background-image:
+    radial-gradient(72% 120% at 50% -20%, rgba(201, 168, 76, 0.20), transparent 62%),
+    radial-gradient(92% 84% at 50% 128%, rgba(201, 168, 76, 0.08), transparent 60%);
+  border-bottom: 1px solid var(--gold-hair);
+  box-shadow: inset 0 1px 0 var(--gold-hair);
+  padding: clamp(56px, 9vw, 104px) 0 clamp(52px, 8vw, 92px);
+}
+/* Faint horizontal ruling — the ruled page of a missal, masked to a soft pool. */
+.hero-midnight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  background-image: repeating-linear-gradient(
+    180deg, rgba(201, 168, 76, 0.10) 0 1px, transparent 1px 34px);
+  -webkit-mask-image: radial-gradient(72% 68% at 50% 46%, #000, transparent 78%);
+          mask-image: radial-gradient(72% 68% at 50% 46%, #000, transparent 78%);
+}
+
+.hero-midnight h1, .hero-title {
+  color: var(--cream);
+  font-size: clamp(2.9rem, 8vw, 5rem);
+  font-weight: 600;
+  line-height: 1.03;
+  margin-top: 18px;
+}
+.hero-icon {
+  width: clamp(96px, 16vw, 124px);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 27%;
+  margin: 0 auto 26px;
+  box-shadow: 0 0 0 1px var(--gold-hair), 0 26px 54px -20px rgba(0, 0, 0, 0.7);
+}
+.hero-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.2rem, 3.2vw, 1.75rem);
+  line-height: 1.35;
+  color: var(--gold-soft);
+  max-width: 32ch;
+  margin: 14px auto 0;
+}
+.hero-meta {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-top: 20px;
+}
+
+/* --------------------------------------------------------- legal page hero */
+
+.legal-hero { text-align: center; padding: clamp(48px, 7vw, 76px) 0 clamp(24px, 3vw, 34px); }
+.legal-hero h1 { font-size: clamp(2.4rem, 6.4vw, 3.7rem); color: var(--navy); }
+.legal-hero .app { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 1.2rem; color: var(--ink-soft); margin-top: 8px; }
+.legal-hero .date {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-top: 14px;
+}
+/* Double gold rule — the header ruling of a missal page. */
+.legal-hero::after {
+  content: "";
+  display: block;
+  width: 132px; height: 3px;
+  margin: 26px auto 0;
+  border-top: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold-hair);
+}
+
+/* ------------------------------------------------------------ section rhythm */
+
+.block { padding: clamp(48px, 7vw, 78px) 0; position: relative; z-index: 2; }
+.block.tight { padding: clamp(30px, 4vw, 46px) 0; }
+.block.alt {
+  background: var(--parchment-deep);
+  border-top: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+}
+/* A card that lifts out of the midnight band, echoing the app's own overlapping
+   -device screenshots. It carries its OWN opaque background by construction, so
+   it can never strand dark text on the dark band — put it on the element, not on
+   a bare .block. Place inside a .wrap directly after .hero-midnight. */
+.overlap {
+  position: relative;
+  z-index: 3;
+  margin-top: -54px;
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lift);
+  padding: clamp(24px, 4vw, 40px);
+}
+@media (max-width: 640px) { .overlap { margin-top: -32px; } }
+/* Works whether .overlap sits in a bare .wrap after the hero or inside a .block —
+   a padded block would otherwise swallow the lift. Degrades to "no lift", never
+   to a broken layout, where :has() is unsupported. */
+.block:has(> .wrap > .overlap) { padding-top: 0; }
+
+.section-head { margin-bottom: clamp(26px, 3.4vw, 40px); }
+.section-head h2 { font-size: clamp(2rem, 4.6vw, 2.9rem); margin-top: 14px; }
+/* :not(.kicker) throughout — a bare `.section-head p` (0,1,1) outranks `.kicker`
+   (0,1,0) and would strip the rubric of its gold and its letterspacing. */
+.section-head p:not(.kicker) { color: var(--ink-soft); margin-top: 12px; max-width: 62ch; font-size: 1.03rem; }
+.section-head.center { text-align: center; }
+.section-head.center p:not(.kicker) { margin-left: auto; margin-right: auto; }
+
+.rule {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(90deg, transparent, var(--gold-hair) 18%,
+                              var(--gold-hair) 82%, transparent);
+}
+
+/* ------------------------------------------------------------ feature grid */
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 18px; }
+.grid.two { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+
+.feature {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: var(--radius);
+  padding: 28px 26px 26px;
+  transition: transform .4s var(--ease), box-shadow .4s, border-color .4s;
+}
+/* A short gold rule at the card's head that runs the full width on hover. */
+.feature::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  height: 2px; width: 54px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  transition: width .45s var(--ease);
+}
+.feature:hover, .feature:focus-within {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--gold-hair);
+}
+.feature:hover::before, .feature:focus-within::before { width: 100%; }
+.feature .ico { font-size: 1.6rem; line-height: 1; color: var(--gold-deep); }
+.feature h3 { font-size: 1.42rem; margin: 14px 0 7px; }
+.feature p { color: var(--ink-soft); font-size: 0.98rem; line-height: 1.62; }
+
+/* --------------------------------------------------------------- vow band */
+
+.vow {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: clamp(48px, 7vw, 76px) 0;
+  border-top: 1px solid var(--gold-hair);
+  border-bottom: 1px solid var(--gold-hair);
+  background: linear-gradient(180deg, rgba(201, 168, 76, 0.07), transparent 62%);
+}
+.vow::before {
+  content: "\2020";                       /* dagger — the missal's own mark */
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+.vow p:not(.kicker) {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 4vw, 2.35rem);
+  line-height: 1.28;
+  color: var(--ink);
+  max-width: 24ch;
+  margin: 0 auto;
+}
+.vow .em { font-style: normal; font-weight: 600; color: var(--navy); }
+
+/* -------------------------------------------------------------------- FAQ */
+
+.faq details { border-bottom: 1px solid var(--hair); }
+.faq details:first-of-type { border-top: 1px solid var(--hair); }
+.faq summary {
+  position: relative;
+  cursor: pointer;
+  list-style: none;
+  padding: 19px 48px 19px 0;
+  font-family: var(--serif);
+  font-size: 1.36rem;
+  font-weight: 600;
+  color: var(--navy);
+  transition: color .25s;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { color: var(--navy-2); }
+/* CSS-drawn chevron: rotation alone signals open/closed, no colour dependency. */
+.faq summary::after {
+  content: "";
+  position: absolute;
+  right: 10px; top: 50%;
+  width: 9px; height: 9px;
+  border-right: 1.5px solid var(--gold);
+  border-bottom: 1.5px solid var(--gold);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform .3s var(--ease);
+}
+.faq details[open] summary::after { transform: translateY(-25%) rotate(-135deg); }
+.faq details > *:not(summary) {
+  padding: 0 48px 20px 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+}
+.faq details[open] > *:not(summary) { animation: reveal .35s var(--ease) both; }
+
+/* ----------------------------------------------------------- contact card */
+
+.contact-card {
+  position: relative;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--gold-hair);
+  border-radius: var(--radius);
+  padding: clamp(34px, 5vw, 52px) 30px;
+  box-shadow: var(--shadow);
+}
+.contact-card p:not(.kicker) { color: var(--ink-soft); }
+.contact-card .mail {
+  display: inline-block;
+  margin-top: 14px;
+  padding-bottom: 3px;
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 3.4vw, 1.75rem);
+  font-weight: 600;
+  color: var(--navy);
+  border-bottom: 1px solid var(--gold);
+  text-decoration: none;
+}
+.contact-card .mail:hover { color: var(--navy-2); border-bottom-color: var(--gold-soft); }
+
+/* ----------------------------------------------------------------- footer */
+
+.foot {
+  position: relative;
+  z-index: 2;
+  background: var(--navy-night);
+  color: var(--foot-ink);
+  padding: 52px 0 40px;
+  border-top: 1px solid var(--gold-hair);
+}
+.foot .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 40px;
+  align-items: center;
+  justify-content: space-between;
+}
+.foot a { color: var(--gold-soft); }
+.foot a:hover { color: var(--gold); }
+.foot .brand { color: var(--gold-soft); }
+.foot h2, .foot h3 { color: var(--gold-soft); }
+.foot-links { display: flex; flex-wrap: wrap; gap: 22px; font-size: 0.92rem; }
+.foot .note {
+  width: 100%;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.02rem;
+  color: var(--foot-dim);
+  padding-top: 24px;
+  margin-top: 6px;
+  border-top: 1px solid rgba(201, 168, 76, 0.16);
+}
+.foot .cr { width: 100%; text-align: center; font-size: 0.8rem; color: var(--foot-faint); }
+
+/* ----------------------------------------------------------- legal pages */
+
+.legal { padding-bottom: clamp(40px, 6vw, 70px); overflow-wrap: break-word; }
+.legal .card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: var(--radius);
+  padding: clamp(26px, 5vw, 56px);
+  box-shadow: var(--shadow);
+}
+/* Silk ribbon marker, as in a bound missal. */
+.legal .card::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: clamp(24px, 6vw, 56px);
+  width: 16px; height: 64px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+  box-shadow: 0 6px 14px -6px rgba(15, 27, 61, 0.5);
+}
+
+.legal h2 {
+  font-size: clamp(1.5rem, 3.2vw, 1.85rem);
+  color: var(--navy);
+  line-height: 1.2;
+  margin: 38px 0 13px;
+  padding-left: 16px;
+  border-left: 3px solid var(--gold);
+}
+.legal h2:first-of-type { margin-top: 4px; }
+.legal h3 { font-size: 1.2rem; margin: 24px 0 8px; }
+.legal p { margin-bottom: 15px; color: var(--ink); }
+.legal ul, .legal ol { margin: 0 0 16px 1.4rem; }
+.legal li { margin-bottom: 9px; color: var(--ink); }
+.legal li::marker { color: var(--gold-deep); }
+
+.legal .highlight {
+  background: linear-gradient(180deg, rgba(201, 168, 76, 0.14), transparent 72%);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 22px 26px;
+  margin: 8px 0 28px;
+  color: var(--ink);
+}
+.legal .highlight p:last-child { margin-bottom: 0; }
+
+/* Illuminated initial on the opening .highlight. `:first-of-type` scopes it to
+   the first one inside each [data-lang] section, so every language gets exactly
+   one; `.lede` is the explicit opt-in when markup order makes that ambiguous.
+   Contract: .highlight is a CONTAINER holding <p> children. */
+.legal .highlight:first-of-type > p:first-of-type::first-letter,
+.legal .highlight.lede > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 3.5em;
+  line-height: 0.82;
+  color: var(--navy);
+  padding: 6px 12px 0 0;
+  margin-top: 2px;
+}
+
+.legal .contact { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--hair); }
+.legal .contact h2 { border-left: 0; padding-left: 0; }
+
+/* ------------------------------------------- resource list (examen page) */
+
+.reslist { display: grid; grid-template-columns: repeat(auto-fit, minmax(292px, 1fr)); gap: 16px; }
+
+.rescard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: var(--radius);
+  padding: 24px 54px 24px 24px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform .35s var(--ease), box-shadow .35s, border-color .35s;
+}
+.rescard:hover, .rescard:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--gold-hair);
+  text-decoration: none;
+}
+.rescard h3 { font-size: 1.28rem; color: var(--navy); }
+.rescard p, .rescard .desc { margin: 0; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
+.rescard .meta {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.rescard::after {
+  content: "\2192";                       /* → */
+  position: absolute;
+  right: 22px; top: 24px;
+  color: var(--gold);
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform .35s var(--ease);
+}
+.rescard:hover::after { transform: translateX(4px); }
+
+/* ------------------------------------------------------ language visibility */
+
+/* Only ever hide a language once JS has confirmed it is running.
+   With JS off, all three render stacked — i.e. exactly today's page. */
+html[data-js="on"] [data-lang]:not([data-lang-active]) { display: none; }
+
+/* Without JS the three languages stack, so give them a gold rule between them.
+   Scoped to the no-JS case: with JS on, the visible section must never inherit
+   a stray border from a hidden sibling. */
+html:not([data-js="on"]) [data-lang] + [data-lang] {
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--gold-hair);
+}
+/* A tablist that cannot switch anything is a trap, so it is hidden without JS.
+   This hides a CONTROL, never content — every language is already on the page.
+   Any no-JS language switcher must therefore not use .langtabs. */
+html:not([data-js="on"]) .langtabs { display: none; }
+
+/* ----------------------------------------------------------------- motion */
+
+@keyframes rise   { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes reveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+[data-rise] {
+  animation: rise .85s var(--ease) both;
+  animation-delay: var(--d, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ print */
+
+@media print {
+  .nav, .foot, .langtabs, .skip-link, .cta-row, body::before,
+  .legal .card::before { display: none !important; }
+  body { background: #fff !important; color: #000; font-size: 11pt; }
+  .wrap { max-width: none; padding: 0; }
+  .legal .card { box-shadow: none; border: 0; padding: 0; }
+  .legal h2, .legal-hero h1, h1, h2, h3 { color: #000; }
+  a { color: #000; }
+}
