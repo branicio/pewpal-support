@@ -359,9 +359,30 @@ strong, b { font-weight: 600; }
   font-size: 0.86rem;
   letter-spacing: 0.03em;
   color: var(--ink-soft);
+  white-space: nowrap;
 }
 .nav-links a:hover { color: var(--navy); }
-@media (max-width: 760px) { .nav-links { display: none; } }
+
+/* Task 8: these links are the ONLY way to reach Terms from Privacy (and back),
+   so they must survive on a phone rather than being hidden the way a purely
+   decorative nav could be. Instead of `display:none` they drop to their own
+   full-width second row (the .nav .wrap is already `flex-wrap:wrap`), which at
+   390px measures ~236px of text in English and ~280px in Portuguese/Spanish
+   against ~334px of available width — and wraps harmlessly if a translation
+   ever outgrows that. `order:3` puts them BELOW the brand + langtabs row
+   rather than between them. */
+@media (max-width: 760px) {
+  .nav .wrap { min-height: 0; padding-top: 9px; padding-bottom: 9px; row-gap: 9px; }
+  .nav-links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 18px;
+    padding-top: 9px;
+    border-top: 1px solid var(--hair);
+  }
+  .nav-links a { font-size: 0.78rem; }
+}
 
 /* -------------------------------------------------------------- langtabs */
 
@@ -491,6 +512,36 @@ strong, b { font-weight: 600; }
   margin-top: 20px;
 }
 
+/* --------------------------------------------------------- store badges */
+
+/* Apple's and Google's own badge art, used unmodified per their brand
+   guidelines — so the only thing styled here is size, spacing and a hover
+   lift. Both badges are black with a light keyline and white type, which is
+   why they still read on the midnight band. Google's art carries built-in
+   transparent padding, so it needs a taller box to sit optically level with
+   Apple's (the same 50/74 ratio the original site used). */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 16px;
+  margin-top: 34px;
+}
+.badges a {
+  display: inline-block;
+  border-radius: 10px;
+  transition: transform .3s var(--ease);
+}
+.badges a:hover { transform: translateY(-3px); }
+.badges .as { height: 52px; width: auto; }
+.badges .gp { height: 77px; width: auto; }
+@media (max-width: 460px) {
+  .badges { gap: 4px 14px; }
+  .badges .as { height: 46px; }
+  .badges .gp { height: 68px; }
+}
+
 /* --------------------------------------------------------- legal page hero */
 
 .legal-hero { text-align: center; padding: clamp(48px, 7vw, 76px) 0 clamp(24px, 3vw, 34px); }
@@ -594,6 +645,12 @@ strong, b { font-weight: 600; }
 }
 .feature:hover::before, .feature:focus-within::before { width: 100%; }
 .feature .ico { font-size: 1.6rem; line-height: 1; color: var(--gold-deep); }
+/* The homepage's feature icons are inline line-art SVG stroked with
+   currentColor, so they take the gold above automatically. The span becomes a
+   flex box because the global reset makes <svg> display:block — left inline it
+   would sit on the text baseline and open a descender gap above the title. */
+.feature .ico { display: flex; }
+.feature .ico svg { width: 30px; height: 30px; }
 .feature h3 { font-size: 1.42rem; margin: 14px 0 7px; }
 .feature p:not(.kicker) { color: var(--ink-soft); font-size: 0.98rem; line-height: 1.62; }
 
@@ -676,7 +733,8 @@ strong, b { font-weight: 600; }
   padding: clamp(34px, 5vw, 52px) 30px;
   box-shadow: var(--shadow);
 }
-.contact-card p:not(.kicker) { color: var(--ink-soft); }
+.contact-card h2 { font-size: clamp(1.75rem, 3.8vw, 2.35rem); margin-top: 13px; }
+.contact-card p:not(.kicker) { color: var(--ink-soft); margin-top: 12px; max-width: 52ch; margin-left: auto; margin-right: auto; }
 .contact-card .mail {
   display: inline-block;
   margin-top: 14px;
@@ -1007,6 +1065,22 @@ html:not([data-js="on"]) .langtabs { display: none; }
   animation: rise .85s var(--ease) both;
   animation-delay: var(--d, 0s);
 }
+
+/* The stagger. `--d` used to need an inline `style="--d:.12s"` on every card;
+   these positional rules supply it instead, because the homepage may not carry
+   a single inline style attribute. Only elements that opted into [data-rise]
+   are affected, and the ceiling is deliberately low (0.48s) so nothing is
+   still fading in by the time a reader has reached it. `both` fill means a
+   card is transparent during its own delay only — never permanently, and the
+   whole thing is switched off by prefers-reduced-motion below. */
+[data-rise]:nth-child(2) { --d: .06s; }
+[data-rise]:nth-child(3) { --d: .12s; }
+[data-rise]:nth-child(4) { --d: .18s; }
+[data-rise]:nth-child(5) { --d: .24s; }
+[data-rise]:nth-child(6) { --d: .30s; }
+[data-rise]:nth-child(7) { --d: .36s; }
+[data-rise]:nth-child(8) { --d: .42s; }
+[data-rise]:nth-child(9) { --d: .48s; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
