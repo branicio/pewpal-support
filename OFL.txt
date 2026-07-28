@@ -1,6 +1,6 @@
 This package bundles two font families under the SIL Open Font License, Version 1.1:
-  EB Garamond — Georg Duffner & Octavio Pardo
-  Inter — Rasmus Andersson
+  EB Garamond — The EB Garamond Project Authors
+  Inter — The Inter Project Authors
 
 -----------------------------------------------------------
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
