@@ -1,10 +1,59 @@
 (function () {
-  // Set first: styles.css only hides languages when this is present, so a
-  // parse error here degrades to all three languages stacked, never to none.
+  // Set first: styles.css only hides languages once this is present, so a
+  // script error before this line (e.g. a parse failure) degrades to all
+  // three languages shown stacked, never to none. That covers failures
+  // BEFORE this line executes. A second, independent guarantee covers
+  // everything AFTER it: resolveLang() below makes it structurally
+  // impossible for apply() to leave zero [data-lang] sections active, even
+  // when the requested language is bogus (a typo'd data-lang-target, a
+  // missing data-lang, a stray extra tab). Showing the wrong language is a
+  // cosmetic bug; showing none is a legal-content outage.
   document.documentElement.dataset.js = "on";
 
   var HASH = { portugues: "pt", espanol: "es", top: "en" };
   var LANG_ATTR = { en: "en", pt: "pt-BR", es: "es" };
+
+  var sections = Array.prototype.slice.call(document.querySelectorAll("[data-lang]"));
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+
+  // ---- one-time structural wiring ---------------------------------------
+  // Contract with tasks 5-8: the HTML need only provide `data-lang` on each
+  // section and `role="tab"` + `data-lang-target` on each control. Every
+  // attribute below is stamped on by this script at load time and must NOT
+  // be hand-authored in the markup (a hand-authored id could collide with
+  // one generated here):
+  //   - role="tabpanel" on every [data-lang] section.
+  //   - an id on every [data-lang] section (an existing id is left alone; a
+  //     missing one is generated).
+  //   - aria-controls on every [role="tab"], pointing at the id of the
+  //     FIRST [data-lang] section whose data-lang matches that tab's
+  //     data-lang-target — the only section of that language that can ever
+  //     become active (see "first match only" in apply() below).
+  //   - aria-hidden, added/removed on every language switch to pull
+  //     inactive panels out of the accessibility tree (belt-and-braces
+  //     alongside the CSS display:none rule).
+  var firstSectionIdForLang = {};
+  sections.forEach(function (s, i) {
+    s.setAttribute("role", "tabpanel");
+    if (!s.id) s.id = "lang-panel-" + (s.dataset.lang || i) + "-" + i;
+    if (!(s.dataset.lang in firstSectionIdForLang)) {
+      firstSectionIdForLang[s.dataset.lang] = s.id;
+    }
+  });
+  tabs.forEach(function (t) {
+    var id = firstSectionIdForLang[t.dataset.langTarget];
+    if (id) t.setAttribute("aria-controls", id);
+  });
+
+  // `data-i18n-en` is the marker attribute every translatable element must
+  // carry (even if its own baseline text already IS the English copy). Each
+  // such element's authored textContent is captured once, here, before any
+  // language switch can overwrite it, and becomes the fallback used
+  // whenever the active language has no `data-i18n-<lang>` override — so
+  // e.g. PT -> ES on an element with no data-i18n-es restores this baseline
+  // instead of leaving stale Portuguese on screen.
+  var i18nEls = Array.prototype.slice.call(document.querySelectorAll("[data-i18n-en]"));
+  i18nEls.forEach(function (el) { el.dataset.i18nBaseline = el.textContent; });
 
   function pick() {
     var h = (location.hash || "").replace("#", "").toLowerCase();
@@ -15,27 +64,53 @@
     return "en";
   }
 
+  // A requested language that matches no section falls back to "en"; if
+  // even "en" has no section, the first [data-lang] section in document
+  // order wins. This is what makes "zero active sections" impossible.
+  function resolveLang(lang) {
+    var i;
+    for (i = 0; i < sections.length; i++) {
+      if (sections[i].dataset.lang === lang) return lang;
+    }
+    for (i = 0; i < sections.length; i++) {
+      if (sections[i].dataset.lang === "en") return "en";
+    }
+    return sections.length ? sections[0].dataset.lang : "en";
+  }
+
   function apply(lang, updateHash) {
-    document.querySelectorAll("[data-lang]").forEach(function (s) {
-      s.toggleAttribute("data-lang-active", s.dataset.lang === lang);
+    lang = resolveLang(lang);
+
+    var activated = false;
+    sections.forEach(function (s) {
+      // Two sections sharing one data-lang value (a markup bug) must still
+      // yield exactly one active panel: only the first match wins.
+      var on = !activated && s.dataset.lang === lang;
+      if (on) activated = true;
+      s.toggleAttribute("data-lang-active", on);
+      if (on) s.removeAttribute("aria-hidden");
+      else s.setAttribute("aria-hidden", "true");
     });
-    document.querySelectorAll('[role="tab"]').forEach(function (t) {
+
+    tabs.forEach(function (t) {
       var on = t.dataset.langTarget === lang;
       t.setAttribute("aria-selected", on ? "true" : "false");
       t.tabIndex = on ? 0 : -1;
     });
-    document.querySelectorAll("[data-i18n-en]").forEach(function (el) {
+
+    i18nEls.forEach(function (el) {
       var v = el.getAttribute("data-i18n-" + lang);
-      if (v) el.textContent = v;
+      el.textContent = v != null ? v : el.dataset.i18nBaseline;
     });
-    document.documentElement.lang = LANG_ATTR[lang];
+
+    document.documentElement.lang = LANG_ATTR[lang] || lang;
+
     if (updateHash) {
       var frag = lang === "pt" ? "#portugues" : lang === "es" ? "#espanol" : "#top";
       history.replaceState(null, "", frag);
     }
   }
 
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
   tabs.forEach(function (t, i) {
     t.addEventListener("click", function () { apply(t.dataset.langTarget, true); });
     t.addEventListener("keydown", function (e) {
