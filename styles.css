@@ -56,6 +56,12 @@
   --foot-dim:       #B0A187;
   --foot-faint:     #9A8D76;
 
+  /* Focus-ring colour. Contrasts with the ground the ring lands on, so it is
+     re-declared by any element that changes the ground (see .hero-midnight,
+     .foot) and flipped wholesale in dark mode. */
+  --ring:         #0F1B3D;   /* = --navy-deep, stated literally so a context
+                                that re-tints --navy-deep cannot dim the ring */
+
   --shadow:       0 18px 50px -22px rgba(15, 27, 61, 0.42);
   --shadow-lift:  0 26px 60px -24px rgba(15, 27, 61, 0.50);
   --radius:       16px;
@@ -86,6 +92,8 @@
     --gold-hair:      rgba(227, 195, 104, 0.30);
     --glow-gold:      rgba(227, 195, 104, 0.07);
     --glow-navy:      rgba(120, 150, 210, 0.07);
+
+    --ring:         #EED28A;   /* light ring on a dark ground */
 
     --shadow:       0 20px 60px -26px rgba(0, 0, 0, 0.75);
     --shadow-lift:  0 26px 70px -26px rgba(0, 0, 0, 0.85);
@@ -150,6 +158,11 @@ body::before {
 }
 .narrow { max-width: 764px; }
 
+/* Standalone alignment utility. It is published in the class contract, so it
+   must do something on its own — not only as .kicker.center / .section-head
+   .center, which remain compound refinements of it. */
+.center { text-align: center; }
+
 /* ------------------------------------------------------------- typography */
 
 h1, h2, h3, h4, .display {
@@ -212,14 +225,22 @@ strong, b { font-weight: 600; }
 
 /* ------------------------------------------------------- a11y affordances */
 
+/* The focus ring is driven by an inherited --ring token rather than by
+   per-element overrides, because `outline-offset` means the ring lands on the
+   SURROUNDING surface, not on the element. What it must contrast with is
+   therefore the ground the element sits on — so the ground sets the colour and
+   every descendant, including .btn-gold, inherits the right one automatically.
+   Measured against the 3.0 floor of WCAG 1.4.11 (non-text contrast):
+     light ground  navy-deep on parchment/card/alt-band  14.98 / 16.59 / 14.18
+     dark ground   gold-soft on ground/card              12.66 / 11.62
+     midnight/foot gold-soft on midnight/footer           9.86 / 10.93
+   A single flat gold ring was previously used everywhere and failed on all
+   three light surfaces (2.03 / 2.25 / 1.92). */
 :focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--ring);
   outline-offset: 3px;
   border-radius: 4px;
 }
-.hero-midnight :focus-visible, .foot :focus-visible { outline-color: var(--gold-soft); }
-/* Gold-on-gold would vanish, so the gold button rings in midnight instead. */
-.btn-gold:focus-visible { outline-color: var(--navy-deep); }
 
 .skip-link {
   position: absolute;
@@ -414,6 +435,7 @@ strong, b { font-weight: 600; }
   overflow: hidden;
   text-align: center;
   color: var(--cream);
+  --ring: #E3C368;              /* this band is dark in BOTH schemes */
   background-color: var(--navy-deep);
   background-image:
     radial-gradient(72% 120% at 50% -20%, rgba(201, 168, 76, 0.20), transparent 62%),
@@ -568,7 +590,7 @@ strong, b { font-weight: 600; }
 .feature:hover::before, .feature:focus-within::before { width: 100%; }
 .feature .ico { font-size: 1.6rem; line-height: 1; color: var(--gold-deep); }
 .feature h3 { font-size: 1.42rem; margin: 14px 0 7px; }
-.feature p { color: var(--ink-soft); font-size: 0.98rem; line-height: 1.62; }
+.feature p:not(.kicker) { color: var(--ink-soft); font-size: 0.98rem; line-height: 1.62; }
 
 /* --------------------------------------------------------------- vow band */
 
@@ -631,7 +653,7 @@ strong, b { font-weight: 600; }
   transition: transform .3s var(--ease);
 }
 .faq details[open] summary::after { transform: translateY(-25%) rotate(-135deg); }
-.faq details > *:not(summary) {
+.faq details > *:not(summary):not(.kicker) {
   padding: 0 48px 20px 0;
   color: var(--ink-soft);
   font-size: 1rem;
@@ -670,6 +692,7 @@ strong, b { font-weight: 600; }
   z-index: 2;
   background: var(--navy-night);
   color: var(--foot-ink);
+  --ring: #E3C368;              /* the footer is dark in BOTH schemes */
   padding: 52px 0 40px;
   border-top: 1px solid var(--gold-hair);
 }
@@ -733,7 +756,7 @@ strong, b { font-weight: 600; }
 }
 .legal h2:first-of-type { margin-top: 4px; }
 .legal h3 { font-size: 1.2rem; margin: 24px 0 8px; }
-.legal p { margin-bottom: 15px; color: var(--ink); }
+.legal p:not(.kicker) { margin-bottom: 15px; color: var(--ink); }
 .legal ul, .legal ol { margin: 0 0 16px 1.4rem; }
 .legal li { margin-bottom: 9px; color: var(--ink); }
 .legal li::marker { color: var(--gold-deep); }
@@ -751,9 +774,10 @@ strong, b { font-weight: 600; }
 /* Illuminated initial on the opening .highlight. `:first-of-type` scopes it to
    the first one inside each [data-lang] section, so every language gets exactly
    one; `.lede` is the explicit opt-in when markup order makes that ambiguous.
-   Contract: .highlight is a CONTAINER holding <p> children. */
-.legal .highlight:first-of-type > p:first-of-type::first-letter,
-.legal .highlight.lede > p:first-of-type::first-letter {
+   Contract: .highlight is a CONTAINER holding <p> children.
+   :not(.kicker) so a rubric label opening a .highlight never takes a drop cap. */
+.legal .highlight:first-of-type > p:first-of-type:not(.kicker)::first-letter,
+.legal .highlight.lede > p:first-of-type:not(.kicker)::first-letter {
   float: left;
   font-family: var(--serif);
   font-weight: 700;
@@ -791,7 +815,7 @@ strong, b { font-weight: 600; }
   text-decoration: none;
 }
 .rescard h3 { font-size: 1.28rem; color: var(--navy); }
-.rescard p, .rescard .desc { margin: 0; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
+.rescard p:not(.kicker), .rescard .desc:not(.kicker) { margin: 0; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
 .rescard .meta {
   font-family: var(--sans);
   font-size: 0.68rem;
