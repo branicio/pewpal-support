@@ -14,7 +14,12 @@
   document.documentElement.dataset.js = "on";
 
   try {
-  var HASH = { portugues: "pt", espanol: "es", top: "en" };
+  // "top" is kept as an English alias so pre-existing external links to
+  // privacy.html#top still select English. "english" is what the language
+  // switcher now emits: #top sits on the <h1> (the skip-link target, which
+  // should land on the heading), while #english sits on the <section> like
+  // #portugues and #espanol — so all three languages scroll to the same place.
+  var HASH = { portugues: "pt", espanol: "es", english: "en", top: "en" };
   var LANG_ATTR = { en: "en", pt: "pt-BR", es: "es" };
 
   var sections = Array.prototype.slice.call(document.querySelectorAll("[data-lang]"));
@@ -84,7 +89,7 @@
 
   // href -> language fragment, used both for the address bar and for rewriting
   // in-site links so the chosen language survives cross-page navigation.
-  var FRAG = { en: "#top", pt: "#portugues", es: "#espanol" };
+  var FRAG = { en: "#english", pt: "#portugues", es: "#espanol" };
 
   // Only the four trilingual content pages. Matching by name deliberately
   // excludes mailto:, external URLs, in-page anchors, and /get/ + /rate/
