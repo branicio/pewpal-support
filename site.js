@@ -82,6 +82,20 @@
     return sections.length ? sections[0].dataset.lang : "en";
   }
 
+  // href -> language fragment, used both for the address bar and for rewriting
+  // in-site links so the chosen language survives cross-page navigation.
+  var FRAG = { en: "#top", pt: "#portugues", es: "#espanol" };
+
+  // Only the four trilingual content pages. Matching by name deliberately
+  // excludes mailto:, external URLs, in-page anchors, and /get/ + /rate/
+  // (single-language interstitials with no [data-lang] sections).
+  var siteLinks = [].slice.call(document.querySelectorAll("a[href]")).filter(function (a) {
+    var base = (a.getAttribute("href") || "").split("#")[0];
+    if (!/^(index|privacy|terms|examen)\.html$/i.test(base)) return false;
+    a.dataset.langBase = base;
+    return true;
+  });
+
   function apply(lang, updateHash) {
     lang = resolveLang(lang);
 
@@ -109,8 +123,21 @@
 
     document.documentElement.lang = LANG_ATTR[lang] || lang;
 
+    // Carry the chosen language across the site. The nav and footer links are
+    // authored as plain "privacy.html" so that with JS off they still work and
+    // land on the stacked all-languages page. With JS on, a reader who picked
+    // Portuguese and then clicked "Privacidade" would otherwise arrive with no
+    // hash, and pick() would fall back to navigator.language — handing an
+    // English-locale browser back an English page and silently discarding the
+    // choice. Rewriting the fragment keeps the selection sticky and keeps the
+    // URL shareable. Restricted to the four content pages by name: /get/ and
+    // /rate/ have no language sections, and external links must not be touched.
+    var frag = FRAG[lang] || "#top";
+    siteLinks.forEach(function (a) {
+      a.setAttribute("href", a.dataset.langBase + frag);
+    });
+
     if (updateHash) {
-      var frag = lang === "pt" ? "#portugues" : lang === "es" ? "#espanol" : "#top";
       history.replaceState(null, "", frag);
     }
   }
