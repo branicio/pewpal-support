@@ -104,18 +104,53 @@ has to keep it too.
 
 ---
 
+## Navigation
+
+Every content page carries the same sticky nav and the same footer links:
+
+| Label (en / pt / es) | Target |
+|---|---|
+| Home · Início · Inicio | `index.html` |
+| Privacy · Privacidade · Privacidad | `privacy.html` |
+| Terms · Termos · Términos | `terms.html` |
+| Examination of Conscience · Exame de Consciência · Examen de Conciencia | `examen.html` |
+| Contact · Contato · Contacto | `mailto:braniapps@gmail.com` |
+
+Labels are swapped by `site.js` from `data-i18n-en` / `-pt` / `-es` attributes; the
+element's authored inner text is the English baseline, so with JavaScript off the nav reads
+English while all three language bodies render stacked — nothing becomes unreachable.
+
+Two things here are deliberate and easy to undo by accident:
+
+- **"Contact" is a `mailto:`, not a page.** It was labelled "Support" until it was pointed
+  out that the label implied a support page.
+- **`.nav-links` must keep `flex-wrap: wrap`.** With five items, the longest label
+  ("Examination of Conscience" / "Examen de Conciencia") overflows a 320px viewport by up to
+  54px without it. The links are also deliberately NOT `display:none` on phones the way a
+  decorative nav could be — they are the only cross-page navigation on the site.
+
 ## Languages and anchors
 
 `privacy.html`, `terms.html` and `examen.html` are **single stacked trilingual pages**
 (English → Português → Español), each with the same three anchors:
 
-| Anchor | Language |
-|---|---|
-| `#top` | English |
-| `#portugues` | Português (pt-BR) |
-| `#espanol` | Español |
+| Anchor | Selects | Sits on | Scrolls to |
+|---|---|---|---|
+| `#english` | English | the `<section data-lang="en">` | top of page |
+| `#portugues` | Português (pt-BR) | the `<section data-lang="pt">` | top of page |
+| `#espanol` | Español | the `<section data-lang="es">` | top of page |
+| `#top` | English *(legacy alias)* | the English `<h1>` | the heading |
 
 Example: https://branicio.github.io/pewpal-support/privacy.html#espanol
+
+**Why `#top` and `#english` both exist and both mean English.** `#top` is the
+skip-link target, where landing *on the heading* is the correct behaviour for someone
+skipping the nav — but that put English ~200px lower than Portuguese and Spanish, whose
+anchors sit on the `<section>`. `#english` was added on the section so all three languages
+scroll identically. `#top` is kept, and still selects English, because external links to
+`privacy.html#top` predate this and must keep working. Do not "tidy up" by deleting either
+one: removing `#top` breaks old links and the skip link, removing `#english` reintroduces
+the scroll discrepancy.
 
 > **Store listings deliberately use the BASE URLs above for all four locales**
 > (en-US, pt-BR, es-MX, es-ES) — **no `#anchor` deep-links.** This keeps the locales
@@ -129,8 +164,17 @@ Example: https://branicio.github.io/pewpal-support/privacy.html#espanol
 languages as sibling `<section data-lang="en|pt|es">` elements. `site.js` is what turns
 that into a tabbed view:
 
-- On load it reads `location.hash` (`#top` → en, `#portugues` → pt, `#espanol` → es); if
-  the hash is empty or unrecognised it falls back to `navigator.language`, then to English.
+- On load it reads `location.hash` (`#english` or `#top` → en, `#portugues` → pt,
+  `#espanol` → es); if the hash is empty or unrecognised it falls back to
+  `navigator.language`, then to English.
+- **It rewrites in-site links to carry the active language.** The nav and footer links are
+  authored as plain `privacy.html` so they still work with JavaScript off; with JS on,
+  `apply()` appends the current language fragment to every link pointing at `index.html`,
+  `privacy.html`, `terms.html` or `examen.html`. Without this, a reader who picked
+  Português and then clicked "Privacidade" arrived with no hash and got English back via
+  `navigator.language` — which is what an English-locale phone reports even when its owner
+  is reading in Portuguese. `mailto:`, external URLs, in-page anchors and the
+  single-language `get/` + `rate/` interstitials are deliberately excluded by filename.
 - Clicking a language tab (`role="tab"`, `EN`/`PT`/`ES` in the nav) shows that language's
   section, hides the other two (`data-lang-active` + `aria-hidden`), sets
   `document.documentElement.lang`, and updates `location.hash` via `history.replaceState`
