@@ -25,7 +25,7 @@ Plain HTML, no build step. Served by **GitHub Pages** from the `main` branch roo
 |---|---|---|
 | Get Pew Pal | https://branicio.github.io/pewpal-support/get/ | OS-detecting store smart link |
 | Rate Pew Pal | https://branicio.github.io/pewpal-support/rate/ | Write-a-review deep link |
-| Examination of Conscience | https://branicio.github.io/pewpal-support/examen.html | Trilingual examen, linked from the home page |
+| Examination of Conscience | https://branicio.github.io/pewpal-support/examen.html | Four-language examen (EN/PT/ES/FR), linked from the home page |
 | App icon | https://branicio.github.io/pewpal-support/app-icon.png | Shared asset |
 
 `/get/` and `/rate/` are directories containing `index.html` — the trailing slash is the
@@ -37,14 +37,14 @@ canonical form.
 
 | Path | Purpose |
 |---|---|
-| `index.html` | Home page — trilingual landing page (English → Português → Español stacked sections) |
-| `privacy.html` | Privacy Policy, same trilingual structure |
-| `terms.html` | Terms of Use, same trilingual structure |
-| `examen.html` | Examination of Conscience — trilingual, links out to external publishers only |
+| `index.html` | Home page — four-language landing page (English → Português → Español → Français stacked sections) |
+| `privacy.html` | Privacy Policy, same four-language structure |
+| `terms.html` | Terms of Use, same four-language structure |
+| `examen.html` | Examination of Conscience — four languages, links out to external publishers only |
 | `styles.css` | The one stylesheet for all four content pages: design tokens (colour, type, spacing), card/nav/footer components, the `[data-lang]` show/hide rules and their no-JS fallback, and the `[data-rise]` load-in animation (disabled under `prefers-reduced-motion`) |
 | `site.js` | Language-tab controller — see "Languages and anchors" below. No other behaviour lives here; the smart-link pages (`get/`, `rate/`) intentionally have their own separate inline scripts, not this file |
 | `fonts/` | Three self-hosted `.woff2` files (EB Garamond roman + italic, Inter) — see "Self-hosted fonts" below |
-| `badges/` | Six vendored App Store / Google Play badge images — see "Vendored store badges" below |
+| `badges/` | Eight vendored App Store / Google Play badge images — see "Vendored store badges" below |
 | `OFL.txt` | The SIL Open Font License covering the `fonts/` files — required attribution for both EB Garamond and Inter |
 | `app-icon.png` | Shared app-icon asset used as the favicon and the nav/footer brand mark on every page |
 | `get/index.html`, `rate/index.html` | Single-file smart-link interstitials — see "Smart links" below |
@@ -53,7 +53,7 @@ canonical form.
 
 ## Vendored store badges (`badges/`)
 
-The site loads **no third-party subresource anywhere** — fonts, the app icon and the six
+The site loads **no third-party subresource anywhere** — fonts, the app icon and the eight
 App Store / Google Play badges are all served from this repo. The badges are Apple's and
 Google's own artwork, downloaded byte-for-byte from:
 
@@ -62,9 +62,17 @@ Google's own artwork, downloaded byte-for-byte from:
 | `badges/app-store-en-us.svg` | `https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83` |
 | `badges/app-store-pt-br.svg` | …same with `/pt-br` |
 | `badges/app-store-es-mx.svg` | …same with `/es-mx` |
+| `badges/app-store-fr-fr.svg` | …same with `/fr-fr` |
 | `badges/google-play-en-us.png` | `https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png` |
 | `badges/google-play-pt-br.png` | …same with `intl/pt-BR` + `pt-br_badge_web_generic.png` |
 | `badges/google-play-es.png` | …same with `intl/es` + `es_badge_web_generic.png` |
+| `badges/google-play-fr.png` | …same with `intl/fr` + `fr_badge_web_generic.png` |
+
+> The Apple endpoint now answers with a redirect to
+> `toolbox.marketingtools.apple.com/api/badges/…`, so fetch it with `curl -L` — without `-L`
+> you save an empty file. Checked 2026-09-24: following the redirect, the `en-us` and `es-mx`
+> downloads are byte-identical to the files committed here, so the redirect serves the same
+> artwork and the `fr-fr` file was fetched the same way.
 
 > **Never modify these files.** Apple's and Google's marketing guidelines permit hosting
 > their badge art but not altering it — no recolouring, cropping, rescaling or re-encoding,
@@ -92,8 +100,16 @@ home page.
 Both families are SIL Open Font License (OFL) 1.1 — see `OFL.txt`, which covers both and
 must ship alongside them (the OFL requires the license text to travel with the font). Only
 the `latin` subset is vendored: the redesign's characters were measured and `latin-ext` adds
-zero coverage for this site's English/Portuguese/Spanish content, so it was dropped to keep
+zero coverage for this site's English/Portuguese/Spanish (and, since 2026-09-24, French) content, so it was dropped to keep
 the payload small (3 files, ~117 KB total, down from an initial 14-file/951 KB pass).
+
+**French (2026-09-24) needed no new font file.** Measured against the three `.woff2` cmaps:
+`é è ê ë à â ç ô î ï û ù ü « » ’ —` and the no-break space U+00A0 are all in the `latin`
+subset, and so are `œ`/`Œ` (U+0153/U+0152 — outside Latin-1, but Google's `latin` subset carries
+them). Missing from all three files: **U+202F narrow no-break space**, `Ÿ` (U+0178) and `№`. So
+the French pages put an ordinary no-break space (`&nbsp;`, U+00A0) before `: ; ? !` and inside
+`« »`, never U+202F — a U+202F would silently fall back to a system font for that one glyph.
+If a later edit wants the thin French space, it has to add a subset that contains it.
 
 Self-hosting, same as the badges above, means **zero third-party requests of any kind** —
 no Google Fonts DNS/TLS round trip, no dependency on a CDN staying up, and no way for a
@@ -108,17 +124,17 @@ has to keep it too.
 
 Every content page carries the same sticky nav and the same footer links:
 
-| Label (en / pt / es) | Target |
+| Label (en / pt / es / fr) | Target |
 |---|---|
-| Home · Início · Inicio | `index.html` |
-| Privacy · Privacidade · Privacidad | `privacy.html` |
-| Terms · Termos · Términos | `terms.html` |
-| Examination of Conscience · Exame de Consciência · Examen de Conciencia | `examen.html` |
-| Contact · Contato · Contacto | `mailto:braniapps@gmail.com` |
+| Home · Início · Inicio · Accueil | `index.html` |
+| Privacy · Privacidade · Privacidad · Confidentialité | `privacy.html` |
+| Terms · Termos · Términos · Conditions | `terms.html` |
+| Examination of Conscience · Exame de Consciência · Examen de Conciencia · Examen de conscience | `examen.html` |
+| Contact · Contato · Contacto · Contact | `mailto:braniapps@gmail.com` |
 
-Labels are swapped by `site.js` from `data-i18n-en` / `-pt` / `-es` attributes; the
+Labels are swapped by `site.js` from `data-i18n-en` / `-pt` / `-es` / `-fr` attributes; the
 element's authored inner text is the English baseline, so with JavaScript off the nav reads
-English while all three language bodies render stacked — nothing becomes unreachable.
+English while all four language bodies render stacked — nothing becomes unreachable.
 
 Two things here are deliberate and easy to undo by accident:
 
@@ -131,42 +147,43 @@ Two things here are deliberate and easy to undo by accident:
 
 ## Languages and anchors
 
-`privacy.html`, `terms.html` and `examen.html` are **single stacked trilingual pages**
-(English → Português → Español), each with the same three anchors:
+`index.html`, `privacy.html`, `terms.html` and `examen.html` are **single stacked four-language
+pages** (English → Português → Español → Français), each with the same anchors:
 
 | Anchor | Selects | Sits on | Scrolls to |
 |---|---|---|---|
 | `#english` | English | the `<section data-lang="en">` | top of page |
 | `#portugues` | Português (pt-BR) | the `<section data-lang="pt">` | top of page |
 | `#espanol` | Español | the `<section data-lang="es">` | top of page |
+| `#francais` | Français (France-first, `lang="fr"`) | the `<section data-lang="fr">` | top of page |
 | `#top` | English *(legacy alias)* | the English `<h1>` | the heading |
 
 Example: https://branicio.github.io/pewpal-support/privacy.html#espanol
 
 **Why `#top` and `#english` both exist and both mean English.** `#top` is the
 skip-link target, where landing *on the heading* is the correct behaviour for someone
-skipping the nav — but that put English ~200px lower than Portuguese and Spanish, whose
-anchors sit on the `<section>`. `#english` was added on the section so all three languages
-scroll identically. `#top` is kept, and still selects English, because external links to
+skipping the nav — but that put English ~200px lower than the other languages, whose
+anchors sit on the `<section>`. `#english` was added on the section so every language
+scrolls identically. `#top` is kept, and still selects English, because external links to
 `privacy.html#top` predate this and must keep working. Do not "tidy up" by deleting either
 one: removing `#top` breaks old links and the skip link, removing `#english` reintroduces
 the scroll discrepancy.
 
-> **Store listings deliberately use the BASE URLs above for all four locales**
-> (en-US, pt-BR, es-MX, es-ES) — **no `#anchor` deep-links.** This keeps the locales
+> **Store listings deliberately use the BASE URLs above for every locale**
+> (en-US, pt-BR, es-MX, es-ES — and fr-FR when it is added) — **no `#anchor` deep-links.** This keeps the locales
 > consistent, and the Terms link lives inside the App Store description, which cannot be
 > changed without a new version and a review cycle. If anchor deep-linking is ever adopted,
 > do it for every locale at once, as a planned release change and not a hotfix.
 
 ### How the language tabs work (`site.js`)
 
-`index.html`, `privacy.html`, `terms.html` and `examen.html` each render all three
-languages as sibling `<section data-lang="en|pt|es">` elements. `site.js` is what turns
+`index.html`, `privacy.html`, `terms.html` and `examen.html` each render all four
+languages as sibling `<section data-lang="en|pt|es|fr">` elements. `site.js` is what turns
 that into a tabbed view:
 
 - On load it reads `location.hash` (`#english` or `#top` → en, `#portugues` → pt,
-  `#espanol` → es); if the hash is empty or unrecognised it falls back to
-  `navigator.language`, then to English.
+  `#espanol` → es, `#francais` → fr); if the hash is empty or unrecognised it falls back to
+  `navigator.language` (`pt*`, `es*`, `fr*`), then to English.
 - **It rewrites in-site links to carry the active language.** The nav and footer links are
   authored as plain `privacy.html` so they still work with JavaScript off; with JS on,
   `apply()` appends the current language fragment to every link pointing at `index.html`,
@@ -175,26 +192,26 @@ that into a tabbed view:
   `navigator.language` — which is what an English-locale phone reports even when its owner
   is reading in Portuguese. `mailto:`, external URLs, in-page anchors and the
   single-language `get/` + `rate/` interstitials are deliberately excluded by filename.
-- Clicking a language tab (`role="tab"`, `EN`/`PT`/`ES` in the nav) shows that language's
-  section, hides the other two (`data-lang-active` + `aria-hidden`), sets
+- Clicking a language tab (`role="tab"`, `EN`/`PT`/`ES`/`FR` in the nav) shows that language's
+  section, hides the other three (`data-lang-active` + `aria-hidden`), sets
   `document.documentElement.lang`, and updates `location.hash` via `history.replaceState`
   (so the URL becomes shareable without adding a back-button entry per click).
 - Left/Right arrow keys move focus and selection between tabs, standard ARIA tablist
   behaviour.
-- Navigating directly to `#portugues` or `#espanol` (or reloading on one) selects that
+- Navigating directly to `#portugues`, `#espanol` or `#francais` (or reloading on one) selects that
   language on load — this is exactly what the anchor deep-links above rely on.
 
 **No-JS fallback.** `site.js` only sets `document.documentElement.dataset.js = "on"` as its
 very first statement, and only `styles.css` rules scoped under `html[data-js="on"]` hide the
 inactive `[data-lang]` sections. That means:
 - With JavaScript disabled entirely, `data-js` is never set, the CSS hiding rule never
-  matches, and all three languages render stacked on one page, top to bottom — still fully
-  readable, still fully linkable via `#top`/`#portugues`/`#espanol` (the browser's native
+  matches, and all four languages render stacked on one page, top to bottom — still fully
+  readable, still fully linkable via `#top`/`#portugues`/`#espanol`/`#francais` (the browser's native
   in-page anchor scroll works with zero script). This is the safety net for a JS-less
   visitor or an App Store reviewer.
 - If `site.js` throws partway through setup, its `catch` block explicitly *removes*
   `data-js` again and logs to `console.error` — it never rethrows — which hands control
-  back to the same no-JS stylesheet branch. So a script error degrades to "all three
+  back to the same no-JS stylesheet branch. So a script error degrades to "all four
   languages visible," never to "zero languages visible" — see the comment at the top of
   `site.js` for the reasoning.
 
@@ -278,10 +295,25 @@ either.
 
 - No Jekyll config, no dependencies, no CI. Edit the HTML, push to `main`, Pages rebuilds.
 - Legal pages state the rights and governing-law clauses per region (Brazil LGPD, Mexico
-  LFPDPPP, EU GDPR/RGPD). Keep the three language sections in sync when editing one.
+  LFPDPPP, EU GDPR/RGPD; France: RGPD + loi n° 78-17 « Informatique et Libertés », a
+  complaint to the CNIL, and the Code de la consommation). Keep the four language sections in
+  sync when editing one.
+- **The French section describes the app as it ships.** Where the English lists the app's
+  languages (the "Multilingual Support" card, the FAQ, the privacy policy's language
+  preference), the French lists English, Portuguese and Spanish — not French — because
+  Pew Pal does not ship French yet. When it does, add French to those three places in all four
+  languages at once.
 - Outbound Apple/Google links are locale-specific — note that Apple's Portuguese privacy
-  path is `/br/` for Brazil (`/pt/` is Portugal, and the old `/pt-br/` path 404s).
+  path is `/br/` for Brazil (`/pt/` is Portugal, and the old `/pt-br/` path 404s). French
+  uses `apple.com/fr/legal/privacy/` (served `lang="fr-FR"`; the `legal/privacy/fr-ww/` path
+  also resolves but is served as `lang="en-US"`), `support.apple.com/fr-fr/118428` (what
+  `HT202039` now redirects to) and `hl=fr` on every Google link.
+- The language tabs trim their side padding to 9px under 460px (`styles.css`, after
+  `.langtabs`): with four tabs at the default 16px the tablist is 214px and dropped below the
+  brand on 360–390px phones, growing the sticky nav from 145px to 193px.
 - A copy of these pages is mirrored in the Pew Pal app repo under `docs/` for reference.
   **This repo's root is the deploy source** — the mirror is not published.
 
-_All URLs above verified returning HTTP 200 on 2026-07-27._
+_All URLs above verified returning HTTP 200 on 2026-07-27. The French section's outbound links
+(Apple, Google, CNIL, and the three examen publishers) were verified returning HTTP 200 on
+2026-09-24._
