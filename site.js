@@ -1,7 +1,7 @@
 (function () {
   // Set first: styles.css only hides languages once this is present, so a
   // script error before this line (e.g. a parse failure) degrades to all
-  // three languages shown stacked, never to none. That covers failures
+  // four languages shown stacked, never to none. That covers failures
   // BEFORE this line executes. Everything AFTER it runs inside the
   // try/catch below, whose catch removes this very attribute: it is what
   // authorises the stylesheet to hide any [data-lang] section, so any
@@ -18,9 +18,10 @@
   // privacy.html#top still select English. "english" is what the language
   // switcher now emits: #top sits on the <h1> (the skip-link target, which
   // should land on the heading), while #english sits on the <section> like
-  // #portugues and #espanol — so all three languages scroll to the same place.
-  var HASH = { portugues: "pt", espanol: "es", english: "en", top: "en" };
-  var LANG_ATTR = { en: "en", pt: "pt-BR", es: "es" };
+  // #portugues, #espanol and #francais — so every language scrolls to the
+  // same place.
+  var HASH = { portugues: "pt", espanol: "es", francais: "fr", english: "en", top: "en" };
+  var LANG_ATTR = { en: "en", pt: "pt-BR", es: "es", fr: "fr" };
 
   var sections = Array.prototype.slice.call(document.querySelectorAll("[data-lang]"));
   var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
@@ -70,6 +71,7 @@
     var n = (navigator.language || "en").toLowerCase();
     if (n.indexOf("pt") === 0) return "pt";
     if (n.indexOf("es") === 0) return "es";
+    if (n.indexOf("fr") === 0) return "fr";
     return "en";
   }
 
@@ -89,9 +91,9 @@
 
   // href -> language fragment, used both for the address bar and for rewriting
   // in-site links so the chosen language survives cross-page navigation.
-  var FRAG = { en: "#english", pt: "#portugues", es: "#espanol" };
+  var FRAG = { en: "#english", pt: "#portugues", es: "#espanol", fr: "#francais" };
 
-  // Only the four trilingual content pages. Matching by name deliberately
+  // Only the four multilingual content pages. Matching by name deliberately
   // excludes mailto:, external URLs, in-page anchors, and /get/ + /rate/
   // (single-language interstitials with no [data-lang] sections).
   var siteLinks = [].slice.call(document.querySelectorAll("a[href]")).filter(function (a) {
@@ -164,7 +166,7 @@
   } catch (err) {
     // Setup did not complete, so withdraw the authorisation data-js grants
     // the stylesheet to hide content: without it, the no-JS stylesheet
-    // branch takes over and all three languages render stacked, exactly
+    // branch takes over and all four languages render stacked, exactly
     // the known-good degraded state this design already relies on for a
     // script that never ran at all. Never rethrow past this point.
     document.documentElement.removeAttribute("data-js");

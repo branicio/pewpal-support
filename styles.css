@@ -443,6 +443,17 @@ strong, b { font-weight: 600; }
   background: var(--gold-soft);
 }
 
+/* Four tabs (EN/PT/ES/FR) at the default 16px side padding are 214px wide,
+   which no longer fits beside the brand on a 360–390px phone (the budget there
+   is 167–197px), so the tablist dropped to its own row and the sticky nav grew
+   from 145px to 193px. Trimming the side padding to 9px brings the tablist to
+   158px — so it keeps the brand's row at 360–460px, as the three-tab version
+   did — while each tab stays ~36×39px, above the 24×24px WCAG 2.5.8 minimum.
+   At 320px the tablist wraps, exactly as the three-tab version already did. */
+@media (max-width: 460px) {
+  .langtabs [role="tab"], .langtabs .langtab { padding-left: 9px; padding-right: 9px; }
+}
+
 .hero-midnight .langtabs { border-color: rgba(227, 195, 104, 0.4); background: rgba(242, 233, 216, 0.06); }
 .hero-midnight .langtabs [role="tab"] { color: rgba(242, 233, 216, 0.72); }
 .hero-midnight .langtabs [role="tab"][aria-selected="true"] { background: var(--gold); color: var(--navy-deep); }
@@ -1044,10 +1055,10 @@ strong, b { font-weight: 600; }
 /* ------------------------------------------------------ language visibility */
 
 /* Only ever hide a language once JS has confirmed it is running.
-   With JS off, all three render stacked — i.e. exactly today's page. */
+   With JS off, all four render stacked — every language on one page. */
 html[data-js="on"] [data-lang]:not([data-lang-active]) { display: none; }
 
-/* Without JS the three languages stack, so give them a gold rule between them.
+/* Without JS the four languages stack, so give them a gold rule between them.
    Scoped to the no-JS case: with JS on, the visible section must never inherit
    a stray border from a hidden sibling. */
 html:not([data-js="on"]) [data-lang] + [data-lang] {
