@@ -298,11 +298,13 @@ either.
   LFPDPPP, EU GDPR/RGPD; France: RGPD + loi n° 78-17 « Informatique et Libertés », a
   complaint to the CNIL, and the Code de la consommation). Keep the four language sections in
   sync when editing one.
-- **The French section describes the app as it ships.** Where the English lists the app's
-  languages (the "Multilingual Support" card, the FAQ, the privacy policy's language
-  preference), the French lists English, Portuguese and Spanish — not French — because
-  Pew Pal does not ship French yet. When it does, add French to those three places in all four
-  languages at once.
+- **French is one of the app's languages in every section** (owner's decision, 2026-09-24).
+  The app's languages are listed in four places — `index.html`'s meta description, the
+  "Multilingual Support" card, the languages FAQ, and the privacy policy's language-preference
+  line — and each language section lists English, Portuguese, Spanish and French, its own
+  language first where the section already did so. Adding or removing an app language means
+  editing all four places in every section at once; the privacy policy's "Last updated" date
+  moves with it, as that page promises.
 - Outbound Apple/Google links are locale-specific — note that Apple's Portuguese privacy
   path is `/br/` for Brazil (`/pt/` is Portugal, and the old `/pt-br/` path 404s). French
   uses `apple.com/fr/legal/privacy/` (served `lang="fr-FR"`; the `legal/privacy/fr-ww/` path
