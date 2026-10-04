@@ -304,7 +304,14 @@ either.
   line — and each language section lists English, Portuguese, Spanish and French, its own
   language first where the section already did so. Adding or removing an app language means
   editing all four places in every section at once; the privacy policy's "Last updated" date
-  moves with it, as that page promises.
+  moves with it, as that page promises. Since 1.9.0 a fifth place names them: the read-aloud FAQ
+  ("Does Pew Pal read the prayers aloud?") lists the languages the Little Office is *read in*,
+  which follow the bundled recordings, not the UI — a new app language joins that list only once
+  its audio ships.
+- **The features grid holds nine cards on purpose.** `.grid` never shows more than three columns
+  (1024px of content, `minmax(258px, 1fr)`), so nine fill it evenly and a tenth would sit alone on
+  its row. In 1.9.0 the read-aloud Little Office took the Breviary card's place rather than
+  becoming a tenth card.
 - Outbound Apple/Google links are locale-specific — note that Apple's Portuguese privacy
   path is `/br/` for Brazil (`/pt/` is Portugal, and the old `/pt-br/` path 404s). French
   uses `apple.com/fr/legal/privacy/` (served `lang="fr-FR"`; the `legal/privacy/fr-ww/` path
