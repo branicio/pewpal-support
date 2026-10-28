@@ -25,7 +25,7 @@ Plain HTML, no build step. Served by **GitHub Pages** from the `main` branch roo
 |---|---|---|
 | Get Pew Pal | https://branicio.github.io/pewpal-support/get/ | OS-detecting store smart link |
 | Rate Pew Pal | https://branicio.github.io/pewpal-support/rate/ | Write-a-review deep link |
-| Examination of Conscience | https://branicio.github.io/pewpal-support/examen.html | Four-language examen (EN/PT/ES/FR), linked from the home page |
+| Examination of Conscience | https://branicio.github.io/pewpal-support/examen.html | Five-language examen (EN/PT/ES/FR/IT), linked from the home page |
 | App icon | https://branicio.github.io/pewpal-support/app-icon.png | Shared asset |
 
 `/get/` and `/rate/` are directories containing `index.html` — the trailing slash is the
@@ -37,14 +37,14 @@ canonical form.
 
 | Path | Purpose |
 |---|---|
-| `index.html` | Home page — four-language landing page (English → Português → Español → Français stacked sections) |
-| `privacy.html` | Privacy Policy, same four-language structure |
-| `terms.html` | Terms of Use, same four-language structure |
-| `examen.html` | Examination of Conscience — four languages, links out to external publishers only |
+| `index.html` | Home page — five-language landing page (English → Português → Español → Français → Italiano stacked sections) |
+| `privacy.html` | Privacy Policy, same five-language structure |
+| `terms.html` | Terms of Use, same five-language structure |
+| `examen.html` | Examination of Conscience — five languages, links out to external publishers only |
 | `styles.css` | The one stylesheet for all four content pages: design tokens (colour, type, spacing), card/nav/footer components, the `[data-lang]` show/hide rules and their no-JS fallback, and the `[data-rise]` load-in animation (disabled under `prefers-reduced-motion`) |
 | `site.js` | Language-tab controller — see "Languages and anchors" below. No other behaviour lives here; the smart-link pages (`get/`, `rate/`) intentionally have their own separate inline scripts, not this file |
 | `fonts/` | Three self-hosted `.woff2` files (EB Garamond roman + italic, Inter) — see "Self-hosted fonts" below |
-| `badges/` | Eight vendored App Store / Google Play badge images — see "Vendored store badges" below |
+| `badges/` | Ten vendored App Store / Google Play badge images — see "Vendored store badges" below |
 | `OFL.txt` | The SIL Open Font License covering the `fonts/` files — required attribution for both EB Garamond and Inter |
 | `app-icon.png` | Shared app-icon asset used as the favicon and the nav/footer brand mark on every page |
 | `get/index.html`, `rate/index.html` | Single-file smart-link interstitials — see "Smart links" below |
@@ -53,7 +53,7 @@ canonical form.
 
 ## Vendored store badges (`badges/`)
 
-The site loads **no third-party subresource anywhere** — fonts, the app icon and the eight
+The site loads **no third-party subresource anywhere** — fonts, the app icon and the ten
 App Store / Google Play badges are all served from this repo. The badges are Apple's and
 Google's own artwork, downloaded byte-for-byte from:
 
@@ -63,16 +63,20 @@ Google's own artwork, downloaded byte-for-byte from:
 | `badges/app-store-pt-br.svg` | …same with `/pt-br` |
 | `badges/app-store-es-mx.svg` | …same with `/es-mx` |
 | `badges/app-store-fr-fr.svg` | …same with `/fr-fr` |
+| `badges/app-store-it-it.svg` | …same with `/it-it` |
 | `badges/google-play-en-us.png` | `https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png` |
 | `badges/google-play-pt-br.png` | …same with `intl/pt-BR` + `pt-br_badge_web_generic.png` |
 | `badges/google-play-es.png` | …same with `intl/es` + `es_badge_web_generic.png` |
 | `badges/google-play-fr.png` | …same with `intl/fr` + `fr_badge_web_generic.png` |
+| `badges/google-play-it.png` | …same with `intl/it` + `it_badge_web_generic.png` |
 
 > The Apple endpoint now answers with a redirect to
 > `toolbox.marketingtools.apple.com/api/badges/…`, so fetch it with `curl -L` — without `-L`
 > you save an empty file. Checked 2026-09-24: following the redirect, the `en-us` and `es-mx`
 > downloads are byte-identical to the files committed here, so the redirect serves the same
-> artwork and the `fr-fr` file was fetched the same way.
+> artwork and the `fr-fr` file was fetched the same way. Checked again 2026-10-27: the same
+> recipe reproduced the committed `fr-fr` and `fr` files byte for byte, and the `it-it` and `it`
+> files were fetched with it.
 
 > **Never modify these files.** Apple's and Google's marketing guidelines permit hosting
 > their badge art but not altering it — no recolouring, cropping, rescaling or re-encoding,
@@ -100,7 +104,8 @@ home page.
 Both families are SIL Open Font License (OFL) 1.1 — see `OFL.txt`, which covers both and
 must ship alongside them (the OFL requires the license text to travel with the font). Only
 the `latin` subset is vendored: the redesign's characters were measured and `latin-ext` adds
-zero coverage for this site's English/Portuguese/Spanish (and, since 2026-09-24, French) content, so it was dropped to keep
+zero coverage for this site's English/Portuguese/Spanish (and, since 2026-09-24, French; since
+2026-10-27, Italian) content, so it was dropped to keep
 the payload small (3 files, ~117 KB total, down from an initial 14-file/951 KB pass).
 
 **French (2026-09-24) needed no new font file.** Measured against the three `.woff2` cmaps:
@@ -110,6 +115,11 @@ them). Missing from all three files: **U+202F narrow no-break space**, `Ÿ` (U+0
 the French pages put an ordinary no-break space (`&nbsp;`, U+00A0) before `: ; ? !` and inside
 `« »`, never U+202F — a U+202F would silently fall back to a system font for that one glyph.
 If a later edit wants the thin French space, it has to add a subset that contains it.
+
+**Italian (2026-10-27) needed no new font file either.** Its accents are all Latin-1 —
+`à è é ì ò ù` and their capitals `À È É Ì Ò Ù` — and, with `« » ’ —` and U+00A0, all are in the
+three `.woff2` cmaps (measured with fontTools). Italian puts **no** space before `: ; ? !` and none
+inside `« »`, so the Italian sections carry none of the French `&nbsp;`s.
 
 Self-hosting, same as the badges above, means **zero third-party requests of any kind** —
 no Google Fonts DNS/TLS round trip, no dependency on a CDN staying up, and no way for a
@@ -124,17 +134,17 @@ has to keep it too.
 
 Every content page carries the same sticky nav and the same footer links:
 
-| Label (en / pt / es / fr) | Target |
+| Label (en / pt / es / fr / it) | Target |
 |---|---|
-| Home · Início · Inicio · Accueil | `index.html` |
-| Privacy · Privacidade · Privacidad · Confidentialité | `privacy.html` |
-| Terms · Termos · Términos · Conditions | `terms.html` |
-| Examination of Conscience · Exame de Consciência · Examen de Conciencia · Examen de conscience | `examen.html` |
-| Contact · Contato · Contacto · Contact | `mailto:braniapps@gmail.com` |
+| Home · Início · Inicio · Accueil · Home | `index.html` |
+| Privacy · Privacidade · Privacidad · Confidentialité · Privacy | `privacy.html` |
+| Terms · Termos · Términos · Conditions · Condizioni | `terms.html` |
+| Examination of Conscience · Exame de Consciência · Examen de Conciencia · Examen de conscience · Esame di coscienza | `examen.html` |
+| Contact · Contato · Contacto · Contact · Contatti | `mailto:braniapps@gmail.com` |
 
-Labels are swapped by `site.js` from `data-i18n-en` / `-pt` / `-es` / `-fr` attributes; the
+Labels are swapped by `site.js` from `data-i18n-en` / `-pt` / `-es` / `-fr` / `-it` attributes; the
 element's authored inner text is the English baseline, so with JavaScript off the nav reads
-English while all four language bodies render stacked — nothing becomes unreachable.
+English while all five language bodies render stacked — nothing becomes unreachable.
 
 Two things here are deliberate and easy to undo by accident:
 
@@ -147,8 +157,8 @@ Two things here are deliberate and easy to undo by accident:
 
 ## Languages and anchors
 
-`index.html`, `privacy.html`, `terms.html` and `examen.html` are **single stacked four-language
-pages** (English → Português → Español → Français), each with the same anchors:
+`index.html`, `privacy.html`, `terms.html` and `examen.html` are **single stacked five-language
+pages** (English → Português → Español → Français → Italiano), each with the same anchors:
 
 | Anchor | Selects | Sits on | Scrolls to |
 |---|---|---|---|
@@ -156,6 +166,7 @@ pages** (English → Português → Español → Français), each with the same 
 | `#portugues` | Português (pt-BR) | the `<section data-lang="pt">` | top of page |
 | `#espanol` | Español | the `<section data-lang="es">` | top of page |
 | `#francais` | Français (France-first, `lang="fr"`) | the `<section data-lang="fr">` | top of page |
+| `#italiano` | Italiano (Italy-first, `lang="it"`) | the `<section data-lang="it">` | top of page |
 | `#top` | English *(legacy alias)* | the English `<h1>` | the heading |
 
 Example: https://branicio.github.io/pewpal-support/privacy.html#espanol
@@ -170,20 +181,29 @@ one: removing `#top` breaks old links and the skip link, removing `#english` rei
 the scroll discrepancy.
 
 > **Store listings deliberately use the BASE URLs above for every locale**
-> (en-US, pt-BR, es-MX, es-ES — and fr-FR when it is added) — **no `#anchor` deep-links.** This keeps the locales
+> (en-US, pt-BR, es-MX, es-ES, fr-FR — and it with 1.11.0) — **no `#anchor` deep-links.** This keeps the locales
 > consistent, and the Terms link lives inside the App Store description, which cannot be
 > changed without a new version and a review cycle. If anchor deep-linking is ever adopted,
 > do it for every locale at once, as a planned release change and not a hotfix.
 
 ### How the language tabs work (`site.js`)
 
-`index.html`, `privacy.html`, `terms.html` and `examen.html` each render all four
-languages as sibling `<section data-lang="en|pt|es|fr">` elements. `site.js` is what turns
+`index.html`, `privacy.html`, `terms.html` and `examen.html` each render all five
+languages as sibling `<section data-lang="en|pt|es|fr|it">` elements. `site.js` is what turns
 that into a tabbed view:
 
 - On load it reads `location.hash` (`#english` or `#top` → en, `#portugues` → pt,
-  `#espanol` → es, `#francais` → fr); if the hash is empty or unrecognised it falls back to
-  `navigator.language` (`pt*`, `es*`, `fr*`), then to English.
+  `#espanol` → es, `#francais` → fr, `#italiano` → it); if the hash is empty or unrecognised it
+  falls back to `navigator.language` (`pt*`, `es*`, `fr*`, `it*`), then to English.
+- **The `it*` fallback is what lands the apps' Italian readers on Italian.** As of 1.11.0 both
+  apps open the bare pages for Italian: `PaywallCopy.supportURL` (iOS) / `PaywallCopy.supportUrl`
+  (Android), used for privacy and terms, add `#portugues` / `#espanol` / `#francais` and nothing
+  for Italian, and the examen screens (`ExaminationView.openExamen`, `ExaminationScreen.kt`) add
+  only `#portugues` / `#espanol` (French opens the bare examen page too, although `#francais`
+  exists there). So an Italian browser gets Italian, while a reader who set the app to Italian on
+  a phone in another language gets that language. Adding `#italiano` (and, for the examen,
+  `#francais`) to those functions closes the gap; Android's `ItalianLocalizationTest` currently
+  pins the bare URL for Italian.
 - **It rewrites in-site links to carry the active language.** The nav and footer links are
   authored as plain `privacy.html` so they still work with JavaScript off; with JS on,
   `apply()` appends the current language fragment to every link pointing at `index.html`,
@@ -192,26 +212,26 @@ that into a tabbed view:
   `navigator.language` — which is what an English-locale phone reports even when its owner
   is reading in Portuguese. `mailto:`, external URLs, in-page anchors and the
   single-language `get/` + `rate/` interstitials are deliberately excluded by filename.
-- Clicking a language tab (`role="tab"`, `EN`/`PT`/`ES`/`FR` in the nav) shows that language's
-  section, hides the other three (`data-lang-active` + `aria-hidden`), sets
+- Clicking a language tab (`role="tab"`, `EN`/`PT`/`ES`/`FR`/`IT` in the nav) shows that language's
+  section, hides the other four (`data-lang-active` + `aria-hidden`), sets
   `document.documentElement.lang`, and updates `location.hash` via `history.replaceState`
   (so the URL becomes shareable without adding a back-button entry per click).
 - Left/Right arrow keys move focus and selection between tabs, standard ARIA tablist
   behaviour.
-- Navigating directly to `#portugues`, `#espanol` or `#francais` (or reloading on one) selects that
+- Navigating directly to `#portugues`, `#espanol`, `#francais` or `#italiano` (or reloading on one) selects that
   language on load — this is exactly what the anchor deep-links above rely on.
 
 **No-JS fallback.** `site.js` only sets `document.documentElement.dataset.js = "on"` as its
 very first statement, and only `styles.css` rules scoped under `html[data-js="on"]` hide the
 inactive `[data-lang]` sections. That means:
 - With JavaScript disabled entirely, `data-js` is never set, the CSS hiding rule never
-  matches, and all four languages render stacked on one page, top to bottom — still fully
-  readable, still fully linkable via `#top`/`#portugues`/`#espanol`/`#francais` (the browser's native
+  matches, and all five languages render stacked on one page, top to bottom — still fully
+  readable, still fully linkable via `#top`/`#portugues`/`#espanol`/`#francais`/`#italiano` (the browser's native
   in-page anchor scroll works with zero script). This is the safety net for a JS-less
   visitor or an App Store reviewer.
 - If `site.js` throws partway through setup, its `catch` block explicitly *removes*
   `data-js` again and logs to `console.error` — it never rethrows — which hands control
-  back to the same no-JS stylesheet branch. So a script error degrades to "all four
+  back to the same no-JS stylesheet branch. So a script error degrades to "all five
   languages visible," never to "zero languages visible" — see the comment at the top of
   `site.js` for the reasoning.
 
@@ -296,18 +316,26 @@ either.
 - No Jekyll config, no dependencies, no CI. Edit the HTML, push to `main`, Pages rebuilds.
 - Legal pages state the rights and governing-law clauses per region (Brazil LGPD, Mexico
   LFPDPPP, EU GDPR/RGPD; France: RGPD + loi n° 78-17 « Informatique et Libertés », a
-  complaint to the CNIL, and the Code de la consommation). Keep the four language sections in
-  sync when editing one.
-- **French is one of the app's languages in every section** (owner's decision, 2026-09-24).
-  The app's languages are listed in four places — `index.html`'s meta description, the
-  "Multilingual Support" card, the languages FAQ, and the privacy policy's language-preference
-  line — and each language section lists English, Portuguese, Spanish and French, its own
-  language first where the section already did so. Adding or removing an app language means
+  complaint to the CNIL, and the Code de la consommation; Italy: the GDPR (Regolamento (UE)
+  2016/679) + the Codice in materia di protezione dei dati personali (D.Lgs. 196/2003), a complaint
+  ("reclamo") to the Garante per la protezione dei dati personali, and the Codice del Consumo
+  (D.Lgs. 206/2005)). Keep the five language sections in sync when editing one.
+- **Register.** The Italian body text is formal — "Lei", with the courtesy capital (Lei, La, Le,
+  Suo/Sua) — as Italian legal and support text is, while the app and its Italian store listing say
+  "tu". The one exception is the home page tagline, which is the app's own paywall headline ("Il
+  tuo compagno per la Santa Messa"), as the Spanish tagline is informal beside a formal body.
+- **French and Italian are among the app's languages in every section** (owner's decision for
+  French, 2026-09-24; Italian followed with 1.11.0, 2026-10-27). The app's languages are listed in
+  four places — `index.html`'s meta description, the "Multilingual Support" card, the languages
+  FAQ, and the privacy policy's language-preference line — and each language section lists
+  English, Portuguese, Spanish, French and Italian, its own language first where the section
+  already did so. Adding or removing an app language means
   editing all four places in every section at once; the privacy policy's "Last updated" date
   moves with it, as that page promises. Since 1.9.0 a fifth place names them: the read-aloud FAQ
   ("Does Pew Pal read the prayers aloud?") lists the languages the Little Office is *read in*,
   which follow the bundled recordings, not the UI — a new app language joins that list only once
-  its audio ships.
+  its audio ships. Italian's did with 1.11.0 (217 recordings in `OfficiumContent/parvum-audio/it`),
+  so the list names all five.
 - **The features grid holds nine cards on purpose.** `.grid` never shows more than three columns
   (1024px of content, `minmax(258px, 1fr)`), so nine fill it evenly and a tenth would sit alone on
   its row. In 1.9.0 the read-aloud Little Office took the Breviary card's place rather than
@@ -316,13 +344,23 @@ either.
   path is `/br/` for Brazil (`/pt/` is Portugal, and the old `/pt-br/` path 404s). French
   uses `apple.com/fr/legal/privacy/` (served `lang="fr-FR"`; the `legal/privacy/fr-ww/` path
   also resolves but is served as `lang="en-US"`), `support.apple.com/fr-fr/118428` (what
-  `HT202039` now redirects to) and `hl=fr` on every Google link.
-- The language tabs trim their side padding to 9px under 460px (`styles.css`, after
-  `.langtabs`): with four tabs at the default 16px the tablist is 214px and dropped below the
-  brand on 360–390px phones, growing the sticky nav from 145px to 193px.
+  `HT202039` now redirects to) and `hl=fr` on every Google link. Italian uses
+  `apple.com/it/legal/privacy/` (served `lang="it-IT"`; `legal/privacy/it-ww/` 404s),
+  `support.apple.com/it-it/118428` and `hl=it` on every Google link.
+- **Check outbound links with a GET, not only `curl -I`.** `support.google.com` answers HEAD with
+  404 for pages that load fine (GET 200), and the Garante's
+  `/modulistica-e-servizi-online/reclamo` answers HEAD 200 but serves an error page; the Italian
+  privacy policy links `/diritti/come-agire-per-tutelare-i-tuoi-dati-personali/reclamo` instead.
+- The language tabs trim their side padding (`styles.css`, after `.langtabs`): to 11px up to
+  960px and to 6px under 460px. Five tabs at the default 16px are 262px, which wrapped the desktop
+  nav onto two rows at 900–945px; and at the four-tab value of 9px they are 192px, which dropped
+  below the brand on 360–375px phones (sticky nav 145px → 193px). With both, the nav is the same
+  height as with four tabs at every width from 320px to 1280px. A sixth tab needs measuring again.
 - A copy of these pages is mirrored in the Pew Pal app repo under `docs/` for reference.
   **This repo's root is the deploy source** — the mirror is not published.
 
 _All URLs above verified returning HTTP 200 on 2026-07-27. The French section's outbound links
 (Apple, Google, CNIL, and the three examen publishers) were verified returning HTTP 200 on
-2026-09-24._
+2026-09-24. The Italian section's (Apple, Google, the Garante, and the three examen publishers: the
+Penitenzieria Apostolica, Avvenire and the Fathers of Mercy) were verified returning HTTP 200,
+with a GET, on 2026-10-27._
