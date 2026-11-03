@@ -26,7 +26,7 @@ Plain HTML, no build step. Served by **GitHub Pages** from the `main` branch roo
 | Get Pew Pal | https://branicio.github.io/pewpal-support/get/ | OS-detecting store smart link |
 | Rate Pew Pal | https://branicio.github.io/pewpal-support/rate/ | Write-a-review deep link |
 | Examination of Conscience | https://branicio.github.io/pewpal-support/examen.html | Six-language examen (EN/PT/ES/FR/IT/DE), linked from the home page |
-| Impressum / Legal notice | https://branicio.github.io/pewpal-support/impressum.html | EU provider notice (§ 5 DDG), every language on one static page; linked from every footer, including `get/` and `rate/` |
+| Impressum / Legal notice | https://branicio.github.io/pewpal-support/impressum.html | EU provider notice (§ 5 DDG), one `[data-lang]` section per language, switched by the language bar like the other pages (all stacked without JS); linked from every footer, including `get/` and `rate/` |
 | App icon | https://branicio.github.io/pewpal-support/app-icon.png | Shared asset |
 
 `/get/` and `/rate/` are directories containing `index.html` — the trailing slash is the
@@ -42,7 +42,7 @@ canonical form.
 | `privacy.html` | Privacy Policy, same six-language structure |
 | `terms.html` | Terms of Use, same six-language structure |
 | `examen.html` | Examination of Conscience — six languages, links out to external publishers only |
-| `impressum.html` | Impressum / Legal notice (2026-11-03): one static page with no `[data-lang]` sections; its text comes from `../Marketing/legal-eu/eu_legal_texts.py`, and `site.js` keeps the reader's language for its nav and footer |
+| `impressum.html` | Impressum / Legal notice (2026-11-03): one `[data-lang]` section per language (`IMPRESSUM_TITLE` + `impressum_section()`); its text comes from `../Marketing/legal-eu/eu_legal_texts.py` |
 | `styles.css` | The one stylesheet for all four content pages: design tokens (colour, type, spacing), card/nav/footer components, the `[data-lang]` show/hide rules and their no-JS fallback, and the `[data-rise]` load-in animation (disabled under `prefers-reduced-motion`) |
 | `site.js` | Language-tab controller — see "Languages and anchors" below. No other behaviour lives here; the smart-link pages (`get/`, `rate/`) intentionally have their own separate inline scripts, not this file |
 | `fonts/` | Three self-hosted `.woff2` files (EB Garamond roman + italic, Inter) — see "Self-hosted fonts" below |
