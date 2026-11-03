@@ -443,25 +443,39 @@ strong, b { font-weight: 600; }
   background: var(--gold-soft);
 }
 
-/* Five tabs (EN/PT/ES/FR/IT) at the default 16px side padding are 262px wide.
-   Two places then lose the row they had with four tabs (measured 2026-10-27):
-   - 900–945px: the desktop nav (brand + links + tabs) fitted on one 69px row
-     from ~895px with four tabs (214px) but only from ~945px with five, so the
-     nav doubled to 105px there. 11px side padding up to 960px brings the
-     tablist back to 212px, and the one-row nav back to ~895px.
-   - 360–460px: the tablist must fit beside the brand (the budget there is
-     167–197px). 9px side padding, the four-tab value, gives 192px, which
-     dropped it to its own row at 360–375px and grew the sticky nav from 145px
-     to 193px. 6px gives 162px, so it keeps the brand's row at 360–460px, while
-     the narrowest tab ("IT") stays 26×39px, above the 24×24px WCAG 2.5.8
-     minimum. At 320px the tablist takes its own row, as it always has.
-   Nav heights now match the four-tab version at every width from 320 to
-   1280px, with no horizontal overflow. */
-@media (max-width: 960px) {
-  .langtabs [role="tab"], .langtabs .langtab { padding-left: 11px; padding-right: 11px; }
+/* Six tabs (EN/PT/ES/FR/IT/DE) at the default 16px side padding are 315px wide.
+   Measured 2026-11-03 at every width from 320 to 1280px, in each of the six
+   languages (their nav labels differ in length), against the five-tab
+   version (whose own rules were 11px up to 960px and 6px up to 460px):
+   - Desktop: the nav (brand + links + tabs) is one 69px row only while the
+     tablist is narrow enough. Six tabs at 16px wrap it to 105px up to 996px
+     in English and up to 1059px in French, the longest label set. 7px side
+     padding up to 1079px (where .wrap reaches its 1080px max width) gives
+     207px, under the five-tab 212px, so the one-row nav starts where it did
+     or earlier in every language (English ~889px, French ~952px, German
+     ~934px).
+   - 320–460px: the tablist must fit beside the brand (the budget is 167px at
+     360px, 182px at 375px). Six tabs at the five-tab 6px are 195px, which
+     dropped the tablist to its own row at 355–389px (sticky nav 145px ->
+     193px). 4px side padding, a 1px gap and 0.08em letter-spacing (from
+     0.14em; two capitals need little tracking) give 161px, under the
+     five-tab 162px. min-width keeps every tab at least 24px wide (the
+     narrowest, "IT", is exactly 24x39px), the WCAG 2.5.8 minimum without
+     relying on its spacing exception. At 320px the tablist takes its own
+     row, as it always has.
+   In no language is the nav taller than the five-tab version at any width
+   from 320 to 1280px (in all five it is lower at 354px, and French is lower
+   at 961–1006px), with no horizontal overflow. */
+@media (max-width: 1079px) {
+  .langtabs [role="tab"], .langtabs .langtab { padding-left: 7px; padding-right: 7px; }
 }
 @media (max-width: 460px) {
-  .langtabs [role="tab"], .langtabs .langtab { padding-left: 6px; padding-right: 6px; }
+  .langtabs { gap: 1px; }
+  .langtabs [role="tab"], .langtabs .langtab {
+    padding-left: 4px; padding-right: 4px;
+    min-width: 24px;
+    letter-spacing: 0.08em;
+  }
 }
 
 .hero-midnight .langtabs { border-color: rgba(227, 195, 104, 0.4); background: rgba(242, 233, 216, 0.06); }
@@ -1065,10 +1079,10 @@ strong, b { font-weight: 600; }
 /* ------------------------------------------------------ language visibility */
 
 /* Only ever hide a language once JS has confirmed it is running.
-   With JS off, all five render stacked — every language on one page. */
+   With JS off, all six render stacked — every language on one page. */
 html[data-js="on"] [data-lang]:not([data-lang-active]) { display: none; }
 
-/* Without JS the five languages stack, so give them a gold rule between them.
+/* Without JS the six languages stack, so give them a gold rule between them.
    Scoped to the no-JS case: with JS on, the visible section must never inherit
    a stray border from a hidden sibling. */
 html:not([data-js="on"]) [data-lang] + [data-lang] {
