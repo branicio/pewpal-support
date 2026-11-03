@@ -79,8 +79,13 @@
 
   // A requested language that matches no section falls back to "en"; if
   // even "en" has no section, the first [data-lang] section in document
-  // order wins. This is what makes "zero active sections" impossible.
+  // order wins. This is what makes "zero active sections" impossible. A page
+  // with no [data-lang] sections at all (impressum.html: one static document)
+  // has nothing to show or hide, so the reader's language stands as asked: it
+  // still drives the nav and footer labels, <html lang> and the fragment on
+  // outgoing links. (FRAG is declared below; apply() first runs after it.)
   function resolveLang(lang) {
+    if (!sections.length) return Object.prototype.hasOwnProperty.call(FRAG, lang) ? lang : "en";
     var i;
     for (i = 0; i < sections.length; i++) {
       if (sections[i].dataset.lang === lang) return lang;
@@ -95,12 +100,13 @@
   // in-site links so the chosen language survives cross-page navigation.
   var FRAG = { en: "#english", pt: "#portugues", es: "#espanol", fr: "#francais", it: "#italiano", de: "#deutsch" };
 
-  // Only the four multilingual content pages. Matching by name deliberately
-  // excludes mailto:, external URLs, in-page anchors, and /get/ + /rate/
-  // (single-language interstitials with no [data-lang] sections).
+  // Only the four multilingual content pages and impressum.html (one static
+  // page, but its nav and footer follow the fragment). Matching by name
+  // deliberately excludes mailto:, external URLs, in-page anchors, and /get/ +
+  // /rate/ (single-language interstitials with no [data-lang] sections).
   var siteLinks = [].slice.call(document.querySelectorAll("a[href]")).filter(function (a) {
     var base = (a.getAttribute("href") || "").split("#")[0];
-    if (!/^(index|privacy|terms|examen)\.html$/i.test(base)) return false;
+    if (!/^(index|privacy|terms|examen|impressum)\.html$/i.test(base)) return false;
     a.dataset.langBase = base;
     return true;
   });

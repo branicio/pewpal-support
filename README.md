@@ -26,6 +26,7 @@ Plain HTML, no build step. Served by **GitHub Pages** from the `main` branch roo
 | Get Pew Pal | https://branicio.github.io/pewpal-support/get/ | OS-detecting store smart link |
 | Rate Pew Pal | https://branicio.github.io/pewpal-support/rate/ | Write-a-review deep link |
 | Examination of Conscience | https://branicio.github.io/pewpal-support/examen.html | Six-language examen (EN/PT/ES/FR/IT/DE), linked from the home page |
+| Impressum / Legal notice | https://branicio.github.io/pewpal-support/impressum.html | EU provider notice (§ 5 DDG), every language on one static page; linked from every footer, including `get/` and `rate/` |
 | App icon | https://branicio.github.io/pewpal-support/app-icon.png | Shared asset |
 
 `/get/` and `/rate/` are directories containing `index.html` — the trailing slash is the
@@ -41,6 +42,7 @@ canonical form.
 | `privacy.html` | Privacy Policy, same six-language structure |
 | `terms.html` | Terms of Use, same six-language structure |
 | `examen.html` | Examination of Conscience — six languages, links out to external publishers only |
+| `impressum.html` | Impressum / Legal notice (2026-11-03): one static page with no `[data-lang]` sections; its text comes from `../Marketing/legal-eu/eu_legal_texts.py`, and `site.js` keeps the reader's language for its nav and footer |
 | `styles.css` | The one stylesheet for all four content pages: design tokens (colour, type, spacing), card/nav/footer components, the `[data-lang]` show/hide rules and their no-JS fallback, and the `[data-rise]` load-in animation (disabled under `prefers-reduced-motion`) |
 | `site.js` | Language-tab controller — see "Languages and anchors" below. No other behaviour lives here; the smart-link pages (`get/`, `rate/`) intentionally have their own separate inline scripts, not this file |
 | `fonts/` | Three self-hosted `.woff2` files (EB Garamond roman + italic, Inter) — see "Self-hosted fonts" below |
@@ -149,6 +151,7 @@ Every content page carries the same sticky nav and the same footer links:
 | Terms · Termos · Términos · Conditions · Condizioni · Bedingungen | `terms.html` |
 | Examination of Conscience · Exame de Consciência · Examen de Conciencia · Examen de conscience · Esame di coscienza · Gewissenserforschung | `examen.html` |
 | Contact · Contato · Contacto · Contact · Contatti · Kontakt | `mailto:braniapps@gmail.com` |
+| Legal notice · Aviso legal · Aviso legal · Mentions légales · Note legali · Impressum *(footer only)* | `impressum.html` |
 
 Labels are swapped by `site.js` from `data-i18n-en` / `-pt` / `-es` / `-fr` / `-it` / `-de` attributes;
 the element's authored inner text is the English baseline, so with JavaScript off the nav reads
@@ -228,7 +231,7 @@ that into a tabbed view:
 - **It rewrites in-site links to carry the active language.** The nav and footer links are
   authored as plain `privacy.html` so they still work with JavaScript off; with JS on,
   `apply()` appends the current language fragment to every link pointing at `index.html`,
-  `privacy.html`, `terms.html` or `examen.html`. Without this, a reader who picked
+  `privacy.html`, `terms.html`, `examen.html` or `impressum.html`. Without this, a reader who picked
   Português and then clicked "Privacidade" arrived with no hash and got English back via
   `navigator.language` — which is what an English-locale phone reports even when its owner
   is reading in Portuguese. `mailto:`, external URLs, in-page anchors and the

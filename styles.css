@@ -854,6 +854,8 @@ strong, b { font-weight: 600; }
 }
 .legal h2:first-of-type { margin-top: 4px; }
 .legal h3 { font-size: 1.2rem; margin: 24px 0 8px; }
+/* impressum.html: several languages stacked in one card, each a <section> opening with its own h2. */
+.legal .card > section + section { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--hair); }
 .legal p:not(.kicker) { margin-bottom: 15px; color: var(--ink); }
 .legal ul, .legal ol { margin: 0 0 16px 1.4rem; }
 .legal li { margin-bottom: 9px; color: var(--ink); }
